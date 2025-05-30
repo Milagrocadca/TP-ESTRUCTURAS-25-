@@ -36,3 +36,7 @@ class ConexionMaritima(Conexion):
 
     def __str__(self):
         return super().__str__()[:-1] + f", tipo_agua={self.tipo_agua})"
+
+
+#prueba = Conexion(1, 100, 2, "terrestre", vel_max=80, peso_max=1000)
+# print(prueba)
