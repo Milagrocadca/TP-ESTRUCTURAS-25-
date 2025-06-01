@@ -1,16 +1,9 @@
 from validaciones import *
 
 class Vehiculo:
-    def __init__(self, idVehiculo, tipo, modo, velocidad, capacidad, costo_fijo, costo_km, costo_kg):
-        """
-        :param tipo: Nombre del vehículo (str, ej: 'Camión', 'Tren')
-        :param modo: Modo de transporte ('automotor', 'ferroviario', etc.)
-        :param velocidad: Velocidad nominal (km/h)
-        :param capacidad: Capacidad de carga (kg)
-        :param costo_fijo: Costo fijo por tramo ($)
-        :param costo_km: Costo por km recorrido ($)
-        :param costo_kg: Costo por kg transportado ($)
-        """
+    def __init__(self, tipo, modo, velocidad, capacidad, costo_fijo, costo_km, costo_kg):
+        
+
         if not Vehiculo.validarModo(modo):
             raise ValueError ("El modo del vehiculo ingresado no se encentra dentro de las opciones disponibles")
 
@@ -29,7 +22,7 @@ class Vehiculo:
         elif not validarPositivo(costo_km):
             raise ValueError("El valor del costo por km debe ser un numero positivo") 
          
-        self.idVehiculo= idVehiculo
+        
         
         self.tipo = tipo        
         self.modo = modo
@@ -61,31 +54,57 @@ class Vehiculo:
     def __repr__(self):
         return f"{self.tipo} ({self.modo})"
 
+    #GETTERS
+    def get_tipo(self): return self._tipo
+    def get_modo(self): return self._modo
+    def get_velocidad(self): return self._velocidad
+    def get_capacidad(self): return self._capacidad
+    def get_costo_fijo(self): return self._costo_fijo
+    def get_costo_km(self): return self._costo_km
+    def get_costo_kg(self): return self._costo_kg
+
+    #SETTERS
+    def set_tipo(self, tipo): self._tipo = tipo
+    def set_modo(self, modo): self._modo = modo
+    def set_velocidad(self, velocidad): self._velocidad = velocidad
+    def set_capacidad(self, capacidad): self._capacidad = capacidad
+    def set_costo_fijo(self, costo_fijo): self._costo_fijo = costo_fijo
+    def set_costo_km(self, costo_km): self._costo_km = costo_km
+    def set_costo_kg(self, costo_kg): self._costo_kg = costo_kg
+    def set_calado_necesario(self, calado_necesario): 
+        self.calado_necesario = calado_necesario
+    
+
 
     #RESTRICCIONES
     def puede_recorrer(self, tramo, peso):
-        """
-        Verifica si el vehículo puede recorrer el tramo dado el peso:
-        - El modo debe coincidir
-        - El peso no debe superar el máximo permitido del tramo
-        - El calado del vehículo debe ser compatible (si aplica)
-        """
-        if tramo.modo != self.modo:
+        if tramo.get_modo() != self._modo:
             return False
-
-        if tramo.peso_max is not None and peso > tramo.peso_max:
+        if tramo.get_peso_max() is not None and peso > tramo.get_peso_max():
             return False
-
-        if tramo.vel_max is not None and self.velocidad > tramo.vel_max:
+        if tramo.get_vel_max() is not None and self._velocidad > tramo.get_vel_max():
             return False
+        return True
+    
+    #CALCULOS
+    def calcular_costo_total(self, distancia, peso):
+        return self._costo_fijo + self._costo_km * distancia + self._costo_kg * peso
 
-        if tramo.modo == "maritimo" and tramo.calado_max is not None:
-            if hasattr(self, "calado_necesario") and self.calado_necesario is not None:
-                if self.calado_necesario > tramo.calado_max:
-                    return False
+    def calcular_tiempo(self, distancia, velocidad_limite=None):
+        v = min(self._velocidad, velocidad_limite) if velocidad_limite else self._velocidad
+        return distancia / v
 
+    def puede_recorrer(self, tramo, peso):
+        if tramo.get_modo() != self._modo:
+            return False
+        if tramo.get_peso_max() is not None and peso > tramo.get_peso_max():
+            return False
+        if tramo.get_vel_max() is not None and self._velocidad > tramo.get_vel_max():
+            return False
         return True
 
+    def __repr__(self):
+        return f"{self._tipo} ({self._modo})"
 
 class Automotor(Vehiculo):
     def __init__(self):
@@ -101,12 +120,12 @@ class Automotor(Vehiculo):
 
     def calcular_costo_total(self, distancia, peso):
         costo_kg = 1 if peso < 15000 else 2
-        return self.costo_fijo + self.costo_km * distancia + costo_kg * peso
+        return self.get_costo_fijo() + self.get_costo_km() * distancia + costo_kg * peso
 
-class Ferroviario(Vehiculo):
+class Tren(Vehiculo):
     def __init__(self):
         super().__init__(
-            tipo="Tren",
+            tipo="Tren de Carga",
             modo="ferroviario",
             velocidad=100,
             capacidad=150000,
@@ -117,7 +136,7 @@ class Ferroviario(Vehiculo):
 
     def calcular_costo_total(self, distancia, peso):
         costo_km = 20 if distancia < 200 else 15
-        return self.costo_fijo + costo_km * distancia + self.costo_kg * peso
+        return self.get_costo_fijo() + costo_km * distancia + self.get_costo_kg() * peso
 
 
 class Aereo(Vehiculo):
