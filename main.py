@@ -1,8 +1,17 @@
 from collections import deque
 
+import os
+import numpy as np
+from solicitud import Solicitud
+from red import cargar_nodos, cargar_conexiones
+from mapa_vehiculos import CLASES_VEHICULO
 
 def main():
-    resultado = Itinerario()
+    #resultado = Itinerario()
+
+    archivo_solicitudes = "solicitudes.csv"
+    archivo_nodos = "nodos.csv"
+    archivo_conexiones = "conexiones.csv"
 
     seguir=True
     while seguir:
@@ -43,6 +52,48 @@ def main():
 
         else:
             print("Opción inválida. Intente de nuevo.")
+
+        #abrir archivos y cargar datos
+        try:
+            for archivo in [archivo_solicitudes, archivo_nodos, archivo_conexiones]:
+                if not os.path.exists(archivo):
+                    print(f"Archivo no encontrado: {archivo}")
+                    return
+            # Cargar nodos y conexiones
+            print("Cargando nodos y conexiones")
+            nodos = cargar_nodos(archivo_nodos)
+            cargar_conexiones(archivo_conexiones, nodos)
+
+            # Mostrar nodos y conexiones
+            print("\nRed de transporte:")
+            for nombre, nodo in nodos.items():
+                print(f"{nombre} ({', '.join(nodo.get_modos())})")
+                for conexion in nodo.get_conexiones():
+                    print(f"   → {conexion.get_destino()} | {conexion}")
+
+            # Cargar solicitudes
+            print("\nCargando solicitudes...")
+            solicitudes = Solicitud.cargar_solicitudes(archivo_solicitudes)
+            for s in solicitudes:
+                print(f"{s}")
+
+            # Crear vehículos disponibles
+            print("\n Vehículos disponibles:")
+            vehiculos = [
+                CLASES_VEHICULO["camion"](),
+                CLASES_VEHICULO["tren"](),
+                CLASES_VEHICULO["avion"](mal_tiempo=True),
+                CLASES_VEHICULO["barcaza"](tipo_agua="mar")
+            ]
+            for v in vehiculos:
+                print(f" {v}")
+            print("\n Sistema inicializado correctamente.")
+
+        except Exception as e:
+            print(f"Error al cargar los datos: {e}")
+            
+            
+
 
 # -------------------- EJECUCIÓN --------------------
 
