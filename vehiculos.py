@@ -46,22 +46,37 @@ class Vehiculo:
         return f"{self.tipo} ({self.modo})"
 
     # GETTERS
-    def get_tipo(self): return self.tipo
-    def get_modo(self): return self.modo
-    def get_velocidad(self): return self.velocidad
-    def get_capacidad(self): return self.capacidad
-    def get_costo_fijo(self): return self.costo_fijo
-    def get_costo_km(self): return self.costo_km
-    def get_costo_kg(self): return self.costo_kg
+    def get_tipo(self): 
+        return self.tipo
+    
+    def get_modo(self): 
+        return self.modo
+    
+    def get_velocidad(self): 
+        return self.velocidad
+    
+    def get_capacidad(self): 
+        return self.capacidad
+    
+    def get_costo_fijo(self): 
+        return self.costo_fijo
+    
+    def get_costo_km(self): 
+        return self.costo_km
+    
+    def get_costo_kg(self): 
+        return self.costo_kg
 
-    # SETTERS
-    def set_tipo(self, tipo): self.tipo = tipo
-    def set_modo(self, modo): self.modo = modo
-    def set_velocidad(self, velocidad): self.velocidad = velocidad
-    def set_capacidad(self, capacidad): self.capacidad = capacidad
-    def set_costo_fijo(self, costo_fijo): self.costo_fijo = costo_fijo
-    def set_costo_km(self, costo_km): self.costo_km = costo_km
-    def set_costo_kg(self, costo_kg): self.costo_kg = costo_kg
+    # SETTERS de aquellas variables que pueden ser modificadas
+    def set_costo_fijo(self, costo_fijo): 
+        self.costo_fijo = costo_fijo
+
+    def set_costo_km(self, costo_km): 
+        self.costo_km = costo_km
+
+    def set_costo_kg(self, costo_kg): 
+        self.costo_kg = costo_kg
+
     def set_calado_necesario(self, calado_necesario): 
         self.calado_necesario = calado_necesario
 

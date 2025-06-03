@@ -7,7 +7,7 @@ class Conexion:
         self.restriccion = restriccion
         self.valor_restriccion = valor_restriccion
 
-        # Inicializa restricciones específicas
+        #RESTRICCIONES
         self.vel_max = float(valor_restriccion) if restriccion == "velocidad_max" else None
         self.peso_max = float(valor_restriccion) if restriccion == "peso_max" else None
         self.tipo_agua = valor_restriccion if restriccion == "tipo" else None

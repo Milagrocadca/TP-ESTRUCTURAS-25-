@@ -1,5 +1,5 @@
 import csv
-import os
+
 from validaciones import *
 
 class Solicitud:
@@ -18,11 +18,20 @@ class Solicitud:
 
         Solicitud.ids_usados.add(id_carga)
 
-    def get_id(self): return self.id_carga
-    def get_peso(self): return self.peso
-    def get_origen(self): return self.origen
-    def get_destino(self): return self.destino
+    #GETTER
+    def get_id(self): 
+        return self.id_carga
+    
+    def get_peso(self): 
+        return self.peso
+    
+    def get_origen(self): 
+        return self.origen
+    
+    def get_destino(self): 
+        return self.destino
 
+    #SETTER
     def set_id(self, id_carga):
         if id_carga in Solicitud.ids_usados:
             raise ValueError('Ya existe una solicitud con ese ID')
@@ -42,12 +51,11 @@ class Solicitud:
             "destino": self.destino
         }
 
-    @staticmethod
-    def cargar_solicitudes(path):
-        if not os.path.exists(path):
-            raise FileNotFoundError(f"Archivo no encontrado: {path}")
-
-        solicitudes = []
+ 
+@staticmethod
+def cargar_solicitudes(path):
+    solicitudes = []
+    try:
         with open(path, newline='', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
@@ -58,5 +66,8 @@ class Solicitud:
                     destino = row['destino']
                     solicitudes.append(Solicitud(id_carga, peso, origen, destino))
                 except Exception as e:
-                    print(f"Error al procesar fila: {row} → {e}")
-        return solicitudes
+                    raise ValueError(f"Error al procesar fila: {row} → {e}")
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Archivo no encontrado: {path}")
+    
+    return solicitudes

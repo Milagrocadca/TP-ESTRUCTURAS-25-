@@ -3,39 +3,19 @@ from validaciones import *
 from collections import deque
 
 class Itinerario:
-    def __init__(self, solicitud, tramos, vehiculo, tiempo_total, costo_total):
-        """
-        Representa la solución óptima para una solicitud de transporte.
-
-        :param solicitud: Objeto Solicitud
-        :param tramos: Lista de objetos Conexion
-        :param vehiculo: Objeto Vehiculo usado
-        :param tiempo_total: Tiempo total del itinerario
-        :param costo_total: Costo total del itinerario
-        """
+    def init(self, solicitud, vehiculo, tramos, kpi_total, kpi_tipo):
         self.solicitud = solicitud
-        self.tramos = tramos
         self.vehiculo = vehiculo
-        self.tiempo_total = tiempo_total
-        self.costo_total = costo_total
+        self.tramos = tramos # lista de (origen, destino, conexion)
+        self.kpi_total = kpi_total
+        self.kpi_tipo = kpi_tipo
 
-    def imprimir(self):
-        print(f"\n Solicitud ID: {self.solicitud.id_carga}")
-        print(f"Vehículo utilizado: {self.vehiculo}")
-        print(f"Tramos del itinerario:")
-        for tramo in self.tramos:
-            print(f"   {tramo.origen} , {tramo.destino} | Modo: {tramo.modo} | Distancia: {tramo.distancia} km")
-        print(f"\n Tiempo total: {self.tiempo_total} horas")
-        print(f"Costo total: ${self.costo_total}")
+    def __str__(self):
+        salida = f"Itinerario para solicitud {self.solicitud.get_id()} ({self.solicitud.get_origen()} → {self.solicitud.get_destino()})\n"
+        salida += f"Vehículo: {self.vehiculo.get_tipo()}\n"
+        salida += f"KPI ({self.kpi_tipo}) total: {self.kpi_total:.2f}\n"
+        salida += "Tramos:\n"
+        for origen, destino, conexion in self.tramos:
+            salida += f"  {origen} → {destino} | {conexion.get_tipo()} | {conexion.get_distancia()} km\n"
+        return salida
 
-    def as_dict(self):
-        """ Útil para exportar a CSV """
-        return {
-            "id_solicitud": self.solicitud.id_carga,
-            "origen": self.solicitud.origen,
-            "destino": self.solicitud.destino,
-            "vehiculo": self.vehiculo.tipo,
-            "modo": self.vehiculo.modo,
-            "tiempo_total": self.tiempo_total,
-            "costo_total": self.costo_total
-        }
