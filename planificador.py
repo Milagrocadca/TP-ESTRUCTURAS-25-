@@ -39,25 +39,26 @@ class Planificador:
         if not self.rutas_validas:
             return None
 
+        #ITINERARIO CHEQUEAR
+        mejor = min(self.rutas_validas, key=lambda x: x[0])
+        tramos_completos = mejor[1]
+        kpi_total = mejor[0]
 
-    mejor = min(self.rutas_validas, key=lambda x: x[0])
-    tramos_completos = mejor[1]
-    kpi_total = mejor[0]
+        # separar vehículo único y tramos sin vehículo
+        primer_tramo = tramos_completos[0]
+        vehiculo_usado = primer_tramo[2]
+        tramos = [(origen, destino, conexion) for (origen, destino, _, conexion) in tramos_completos]
 
-    # separar vehículo único y tramos sin vehículo
-    primer_tramo = tramos_completos[0]
-    vehiculo_usado = primer_tramo[2]
-    tramos = [(origen, destino, conexion) for (origen, destino, _, conexion) in tramos_completos]
+        return Itinerario(
+            solicitud=solicitud,
+            vehiculo=vehiculo_usado,
+            tramos=tramos,
+            kpi_total=kpi_total,
+            kpi_tipo=kpi)
 
-    return Itinerario(
-        solicitud=solicitud,
-        vehiculo=vehiculo_usado,
-        tramos=tramos,
-        kpi_total=kpi_total,
-        kpi_tipo=kpi
-)
 
-    def _dfs(self, actual, destino, peso, kpi, visitados, acumulado, ruta, tipo_conexion_actual):
+    def _dfs(self, actual, origen, destino, peso, kpi, visitados, acumulado, ruta, tipo_conexion_actual, max_cant_vehiculos):
+
         if actual == destino:
             self.rutas_validas.append((acumulado, list(ruta)))
             return
@@ -77,50 +78,48 @@ class Planificador:
                     evaluacion = self.evaluar_ruta(vehiculo, conexion, peso, kpi)
 
                     if evaluacion is not None:
-                        valor = evaluacion
-                        cant = math.ceil(peso / vehiculo.get_capacidad())
-
+                        valor, cant = evaluacion
+                        
                         ruta.append((actual, siguiente, vehiculo, conexion))
                         nuevo_tipo = tipo_conexion if tipo_conexion_actual is None else tipo_conexion_actual
 
                         self._dfs(
-                            actual=siguiente,
-                            destino=destino,
-                            peso=peso,
-                            kpi=kpi,
-                            visitados=visitados,
-                            acumulado=acumulado + valor,
-                            ruta=ruta,
-                            tipo_conexion_actual=nuevo_tipo
-                        )
+                        actual=origen,
+                        destino=destino,
+                        peso=peso,
+                        kpi=kpi,
+                        visitados=visitados,
+                        acumulado=0,
+                        ruta=ruta,
+                        tipo_conexion_actual=None,
+                        max_cant_vehiculos=0
+                    )
+
 
                         ruta.pop()
 
         visitados.remove(actual)
 
+    
+        
+        #tiene todas los  y vehciulos
+        # me fijo si existe ls conexion unica y sino intermediario
+        #llamar las def que creemos en nodo
+
     def evaluar_ruta(self, vehiculo, conexion, peso, kpi):
-        """
-        Verifica si el vehículo puede recorrer la conexión con ese peso,
-        y devuelve el valor del KPI para ese tramo, o None si no se puede.
-        """
         if not vehiculo.puede_recorrer(conexion, peso):
             return None
 
         cant = math.ceil(peso / vehiculo.get_capacidad())
 
         if kpi == "costo":
-            return vehiculo.calcular_costo_total(conexion.get_distancia(), peso) * cant
+            valor= vehiculo.calcular_costo_total(conexion.get_distancia(), peso) * cant
         elif kpi == "tiempo":
-            return vehiculo.calcular_tiempo(conexion.get_distancia(), conexion.get_vel_max())
+            valor = vehiculo.calcular_tiempo(conexion.get_distancia(), conexion.get_vel_max())
         else:
             return None
 
-        
-        #tiene todas los  y vehciulos
-        # me fijo si existe ls conexion unica y sino intermediario
-        #llamar las def que creemos en nodo
-
-
+        return valor, cant
 
 
 """ # A PARTIR DE ACA

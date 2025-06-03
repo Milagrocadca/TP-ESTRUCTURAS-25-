@@ -1,5 +1,5 @@
-from validaciones import *
 
+from validaciones import *
 class Vehiculo:
     def __init__(self, tipo, modo, velocidad, capacidad, costo_fijo, costo_km, costo_kg):
         if not Vehiculo.validarModo(modo):
@@ -27,6 +27,7 @@ class Vehiculo:
     def validarModo(modo):
         lista_modos = ('automotor', 'ferroviario', 'aereo', 'maritimo')
         return modo in lista_modos
+
 
     def calcular_costo_total(self, distancia, peso):
         """
@@ -123,8 +124,8 @@ class Tren(Vehiculo):
         return self.costo_fijo + costo_km * distancia + self.costo_kg * peso
 
 class Aereo(Vehiculo):
-    def __init__(self, mal_tiempo=False):
-        velocidad = 400 if mal_tiempo else 600
+    def __init__(self, conexion:Conexion):
+        velocidad = 400 if conexion.get_mal_clima() else 600
         super().__init__(
             tipo="Avión",
             modo="aereo",

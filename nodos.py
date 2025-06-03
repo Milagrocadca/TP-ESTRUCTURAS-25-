@@ -1,6 +1,9 @@
 from conexion import Conexion
 
 class Nodo:
+    """
+    Representa una ciudad o punto en el grafo, con sus modos de transporte habilitados y conexiones salientes
+    """
     def __init__(self, nombre, modos):
 
         #nombre= Nombre de la ciudad

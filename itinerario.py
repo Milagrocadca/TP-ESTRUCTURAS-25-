@@ -19,3 +19,18 @@ class Itinerario:
             salida += f"  {origen} → {destino} | {conexion.get_tipo()} | {conexion.get_distancia()} km\n"
         return salida
 
+    #GETTER
+    def get_solicitud(self):
+        return self.solicitud
+
+    def get_vehiculo(self):
+        return self.vehiculo
+
+    def get_tramos(self):
+        return self.tramos
+
+    def get_kpi_total(self):
+        return self.kpi_total
+
+    def get_kpi_tipo(self):
+        return self.kpi_tipo

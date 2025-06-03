@@ -1,6 +1,5 @@
 from collections import deque
 
-import os
 import numpy as np
 from solicitud import Solicitud
 from red import cargar_nodos, cargar_conexiones
