@@ -79,14 +79,13 @@ class Vehiculo:
 
     # RESTRICCIONES
     def puede_recorrer(self, tramo, peso):
-        if tramo.get_modo() != self.modo:
+        if tramo.get_tipo().lower() != self.modo:
             return False
         if tramo.get_peso_max() is not None and peso > tramo.get_peso_max():
             return False
         if tramo.get_vel_max() is not None and self.velocidad > tramo.get_vel_max():
             return False
         return True
-
 
 class Vehiculos:
     def __init__(self):

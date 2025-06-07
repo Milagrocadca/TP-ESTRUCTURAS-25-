@@ -74,7 +74,7 @@ class Planificador:
             no_visitado = siguiente not in visitados
 
             if es_tipo_valido and no_visitado:
-                for vehiculo in self.vehiculos:
+                for vehiculo in self.vehiculos.values():
                     evaluacion = self.evaluar_ruta(vehiculo, conexion, peso, kpi)
 
                     if evaluacion is not None:

@@ -1,6 +1,7 @@
 from red import Red
-from vehiculos import Vehiculos
+from vehiculos import *
 from solicitud import Solicitud
+from conexion import Conexion
 
 
 def main():
@@ -16,6 +17,7 @@ def main():
         print("3. Ver lista vehiculos")
         print("4. Agregar solicitud")
         print("5. Salir")
+        
 
         opcion = input("Seleccione una opción: ")
 
@@ -49,4 +51,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
