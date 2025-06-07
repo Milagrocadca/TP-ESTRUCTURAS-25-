@@ -8,17 +8,13 @@ from conexion import Conexion
 # cargar conexiones nos devuelve conexion
 class Red:
     def __init__(self):
-        self.path_nodos = (
-            "archivos_ejemplo-20250526T105123Z-1-001/archivos_ejemplo/nodos.csv"
-        )
-        self.path_conexiones = (
-            "archivos_ejemplo-20250526T105123Z-1-001/archivos_ejemplo/conexiones.csv"
-        )
-        self.red = Red.cargar_nodos(
-            self
-        )  # red = {'nodo1':{}, 'nodo2':{}, ..., 'nodon':{}}
-        Red.cargar_conexiones(self)
-
+        self.path_nodos ='nodos.csv'
+        self.path_conexiones = 'conexiones.csv'
+        self.red = self.cargar_nodos()  # red = {'nodo1':{}, 'nodo2':{}, ..., 'nodon':{}}
+        self.cargar_conexiones()
+        print(f"Nodos cargados: {list(self.red.keys())}")
+        for nombre, nodo in self.red.items():
+            print(f"{nombre}: {len(nodo.conexiones)} conexiones")
     def cargar_nodos(self):
         nodos = {}
         with open(self.path_nodos, newline="", encoding="utf-8") as archivo:

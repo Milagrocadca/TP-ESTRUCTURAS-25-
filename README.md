@@ -17,5 +17,10 @@ Martes 3 de junio:
     Creamos la clase red y modularizamos la funcion de cargar conexiones.
     Editamos la funcion evaluar ruta para que calcule la cantidad de vehiculos a utilizar de acuerdo al tramo mas "critico".
     Agregamos unos getters faltantes.
+
+Sabado 7 de junio: 
+    Reorganizamos main y organizamos planificador en base a lo trabajado anteriormente. 
+    Probamos la carga de archivos
+    
     
 
