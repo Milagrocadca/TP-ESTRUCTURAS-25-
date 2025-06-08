@@ -79,7 +79,7 @@ class Vehiculo:
 
     # RESTRICCIONES
     def puede_recorrer(self, tramo, peso):
-        if tramo.get_modo() != self.modo:
+        if tramo.get_tipo().lower() != self.modo:
             return False
         if tramo.get_peso_max() is not None and peso > tramo.get_peso_max():
             return False
@@ -125,6 +125,26 @@ class Vehiculos:
 
     def getListVehiculos(self):
         return list(self.vehiculos)
+
+    def getInfoVehiculos(self):
+        return self.vehiculos
+
+    def printVehiculos(self):
+        print(
+            f"\n{'Vehiculo':<15}|{'Modo':<15}|{'Velocidad':<15}|{'Capacidad':<15}|{'Costo Fijo':<15}|{'Costo km':<15}|{'Costo kg':<15}"
+        )
+        vehiculos: Vehiculos = self.vehiculos
+        for tipo in vehiculos.keys():
+            vehiculo: Vehiculo = vehiculos[tipo]
+            modo = vehiculo.modo
+            velocidad = vehiculo.velocidad
+            capacidad = vehiculo.capacidad
+            costo_fijo = vehiculo.costo_fijo
+            costo_km = vehiculo.costo_km
+            costo_kg = vehiculo.costo_kg
+            print(
+                f"{tipo:<15}|{modo:<15}|{velocidad:<15}|{capacidad:<15}|{costo_fijo:<15}|{costo_km:<15}|{costo_kg:<15}"
+            )
 
 
 class Automotor(Vehiculo):

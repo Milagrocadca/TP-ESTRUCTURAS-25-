@@ -23,3 +23,6 @@ def inputModo():
     modo = input("\t >Modo transporte: ")  # Validar modo de transporte
     while not validarModo(modo):
         modo = input("\t >Modo transporte: ")  # Validar modo de transporte
+
+    return modo
+

@@ -8,16 +8,17 @@ from conexion import Conexion
 # cargar conexiones nos devuelve conexion
 class Red:
     def __init__(self):
-        self.path_nodos = (
-            "archivos_ejemplo-20250526T105123Z-1-001/archivos_ejemplo/nodos.csv"
-        )
+        self.path_nodos = "TP-ESTRUCTURAS-25--2-main/TP-ESTRUCTURAS-25--main/nodos.csv"
         self.path_conexiones = (
-            "archivos_ejemplo-20250526T105123Z-1-001/archivos_ejemplo/conexiones.csv"
+            "TP-ESTRUCTURAS-25--2-main/TP-ESTRUCTURAS-25--main/conexiones.csv"
         )
-        self.red = Red.cargar_nodos(
-            self
+        self.red = (
+            self.cargar_nodos()
         )  # red = {'nodo1':{}, 'nodo2':{}, ..., 'nodon':{}}
-        Red.cargar_conexiones(self)
+        self.cargar_conexiones()
+        print(f"Nodos cargados: {list(self.red.keys())}")
+        for nombre, nodo in self.red.items():
+            print(f"{nombre}: {len(nodo.conexiones)} conexiones")
 
     def cargar_nodos(self):
         nodos = {}
@@ -44,19 +45,20 @@ class Red:
             origen = row["origen"]
             destino = row["destino"]
             tipo = row["tipo"]
+            modo = tipo.lower()
             distancia = float(row["distancia_km"]) if row["distancia_km"] else 0
             restriccion = row.get("restriccion", "").strip()
             valor = row.get("valor_restriccion", "").strip()
-
-            modo = tipo.lower()
             conexion = None
 
-            if conexion is None:
-                conexion = Conexion(
-                    origen, destino, tipo, distancia, restriccion, valor
-                )
+            conexion_origen = Conexion(
+                origen, destino, tipo, distancia, restriccion, valor
+            )
+            conexion_destino = Conexion(
+                destino, origen, tipo, distancia, restriccion, valor
+            )
 
-            return origen, destino, modo, conexion
+            return origen, destino, modo, conexion_origen, conexion_destino
 
         except Exception as e:
             print(f"Error al cargar conexión: {row}  {e}")
@@ -69,9 +71,17 @@ class Red:
                 for row in reader:
                     resultado = Red.cargar_conexion(row)
                     if resultado:
-                        nodo_origen, nodo_destino, modo, conexion = resultado
-                        self.red[nodo_origen].agregar_conexion(conexion)
+                        (
+                            nodo_origen,
+                            nodo_destino,
+                            modo,
+                            conexion_origen,
+                            conexion_destino,
+                        ) = resultado
+                        self.red[nodo_origen].agregar_conexion(conexion_origen)
                         self.red[nodo_origen].modos.add(modo)
+
+                        self.red[nodo_destino].agregar_conexion(conexion_destino)
                         self.red[nodo_destino].modos.add(modo)
         except FileNotFoundError:
             print(f"Archivo no encontrado: {self.path_conexiones}")

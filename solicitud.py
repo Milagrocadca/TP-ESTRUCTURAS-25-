@@ -41,7 +41,7 @@ class Solicitud:
     def __repr__(self):
         return (f"Solicitud(ID={self.id_carga}, "
                 f"Peso={self.peso} kg, "
-                f"{self.origen} → {self.destino})")
+                f"{self.origen} {self.destino})")
 
     def dic_solicitud(self):
         return {
@@ -52,22 +52,22 @@ class Solicitud:
         }
 
  
-@staticmethod
-def cargar_solicitudes(path):
-    solicitudes = []
-    try:
-        with open(path, newline='', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                try:
-                    id_carga = row['id']
-                    peso = float(row['peso'])
-                    origen = row['origen']
-                    destino = row['destino']
-                    solicitudes.append(Solicitud(id_carga, peso, origen, destino))
-                except Exception as e:
-                    raise ValueError(f"Error al procesar fila: {row} → {e}")
-    except FileNotFoundError:
-        raise FileNotFoundError(f"Archivo no encontrado: {path}")
-    
-    return solicitudes
+    @staticmethod
+    def cargar_solicitudes(path):
+        solicitudes = []
+        try:
+            with open(path, newline='', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    try:
+                        id_carga = row['id_carga']
+                        peso = float(row['peso_kg'])
+                        origen = row['origen']
+                        destino = row['destino']
+                        solicitudes.append(Solicitud(id_carga, peso, origen, destino))
+                    except Exception as e:
+                        raise ValueError(f"Error al procesar fila: {row} {e}")
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Archivo no encontrado: {path}")
+        
+        return solicitudes

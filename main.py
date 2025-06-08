@@ -1,10 +1,12 @@
-import red
-import vehiculos
+from red import Red
+from vehiculos import *
+from solicitud import Solicitud
+from conexion import Conexion
 
 
 def main():
-    red_nodos = red.Red()
-    tipos_vehiculos = vehiculos.Vehiculos()
+    red_nodos = Red()
+    tipos_vehiculos = Vehiculos()
     print(red_nodos.get_red())
 
     flag = True
@@ -13,6 +15,7 @@ def main():
         print("1. Agregar vehiculo")
         print("2. Remover vehiculo")
         print("3. Ver lista vehiculos")
+        print("4. Agregar solicitud")
         print("5. Salir")
 
         opcion = input("Seleccione una opción: ")
@@ -27,7 +30,26 @@ def main():
 
         if opcion == "3":
             # tipo, modo, velocidad, capacidad, costo_fijo, costo_km, costo_kg
-            print(tipos_vehiculos.getListVehiculos())
+            tipos_vehiculos.printVehiculos()
+
+        if opcion == "4":
+            archivo = "TP-ESTRUCTURAS-25--2-main\TP-ESTRUCTURAS-25--main\solicitudes.csv"  # input("Ingrese el archivo: ")
+            solicitudes = Solicitud.cargar_solicitudes(archivo)
+            from planificador import (
+                Planificador,
+            )  # Importa aquí para evitar ciclos si es necesario
+
+            planificador = Planificador(
+                red_nodos.get_red(), tipos_vehiculos.getInfoVehiculos()
+            )
+            for solicitud in solicitudes:
+                itinerario = planificador.planificar(solicitud)
+                if itinerario:
+                    print(itinerario)
+                else:
+                    print(
+                        f"No se encontró itinerario para la solicitud {solicitud.get_id()}"
+                    )
 
         if opcion == "5":
             flag = False
