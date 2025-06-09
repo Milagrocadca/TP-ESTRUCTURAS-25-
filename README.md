@@ -21,6 +21,15 @@ Martes 3 de junio:
 Sabado 7 de junio: 
     Reorganizamos main y organizamos planificador en base a lo trabajado anteriormente. 
     Probamos la carga de archivos
+
+Domingo 8 de junio:
+    Modificamos la relacion entre conexiones.
+    Intentamos resolver los calculos de costo y tiempo
+
+Lunes 9 de junio:
+    Pensamos los graficos a realizar.
+    Resolvimos los calculos de tiempo.
+    Corregimos el print de itinerario, ahora imprime costo total y tiempo total siempre. Luego elige la mejor opcion segun el kpi elegido
     
     
 
