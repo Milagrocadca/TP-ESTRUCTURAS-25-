@@ -13,11 +13,13 @@ class Itinerario:
         self.kpi_total = kpi_total
         self.kpi_tipo = kpi_tipo
         self.max_cant_vehiculos = max_cant_vehiculos
+        self.max_cant_vehiculos = max_cant_vehiculos
 
     def __str__(self):
         salida = f"Itinerario para solicitud {self.solicitud.get_id()} ({self.solicitud.get_origen()} → {self.solicitud.get_destino()})\n"
         salida += f"Vehículo: {self.vehiculo.get_tipo()}\n"
         salida += f"KPI ({self.kpi_tipo}) total: {self.kpi_total:.2f}\n"
+        salida += f"Cantidad máxima de vehículos necesarios en un tramo: {self.max_cant_vehiculos}\n"
         salida += f"Cantidad máxima de vehículos necesarios en un tramo: {self.max_cant_vehiculos}\n"
         salida += "Tramos:\n"
         for origen, destino, conexion in self.tramos:

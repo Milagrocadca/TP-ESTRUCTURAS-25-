@@ -87,7 +87,6 @@ class Vehiculo:
             return False
         return True
 
-
 class Vehiculos:
     def __init__(self):
         self.vehiculos = dict()  # Asumimos que tipo vehiculo es unico

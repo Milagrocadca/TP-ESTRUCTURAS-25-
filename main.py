@@ -17,6 +17,7 @@ def main():
         print("3. Ver lista vehiculos")
         print("4. Agregar solicitud")
         print("5. Salir")
+        
 
         opcion = input("Seleccione una opción: ")
 

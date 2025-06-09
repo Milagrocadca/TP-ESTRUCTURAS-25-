@@ -19,7 +19,6 @@ class Red:
         print(f"Nodos cargados: {list(self.red.keys())}")
         for nombre, nodo in self.red.items():
             print(f"{nombre}: {len(nodo.conexiones)} conexiones")
-
     def cargar_nodos(self):
         nodos = {}
         with open(self.path_nodos, newline="", encoding="utf-8") as archivo:
