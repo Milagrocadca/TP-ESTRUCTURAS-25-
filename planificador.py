@@ -25,7 +25,8 @@ class Planificador:
             peso=peso,
             kpi=kpi,
             visitados=visitados,
-            acumulado=0,
+            acumulado_costo=0,
+            acumulado_tiempo=0,
             ruta=ruta,
             rutas_validas=rutas_validas,
             tipo_conexion_actual=None,
@@ -33,7 +34,7 @@ class Planificador:
         if not rutas_validas:
             return None
 
-        # ITINERARIO CHEQUEAR
+        """
         mejor = None
         for ruta in rutas_validas:
             valor = ruta[0]
@@ -45,6 +46,17 @@ class Planificador:
         tramos_completos = mejor[1]
         kpi_total = mejor[0]
         max_cant_vehiculos = mejor[2]
+        """
+        if not rutas_validas:
+            return None
+
+        indice_kpi = 0 if kpi == "costo" else 1
+        mejor = min(rutas_validas, key=lambda r: r[indice_kpi])
+
+        costo_total = mejor[0]
+        tiempo_total = mejor[1]
+        tramos_completos = mejor[2]
+        max_cant_vehiculos = mejor[3]
 
         # separar vehículo único y tramos sin vehículo
         primer_tramo = tramos_completos[0]
@@ -58,7 +70,9 @@ class Planificador:
             solicitud=solicitud,
             vehiculo=vehiculo_usado,
             tramos=tramos,
-            kpi_total=kpi_total,
+            #pi_total=kpi_total,
+            costo_total=costo_total,
+            tiempo_total=tiempo_total,
             kpi_tipo=kpi,
             max_cant_vehiculos=max_cant_vehiculos,
         )
@@ -70,7 +84,8 @@ class Planificador:
         peso,
         kpi,
         visitados,
-        acumulado,
+        acumulado_costo,
+        acumulado_tiempo,
         ruta,
         rutas_validas,
         tipo_conexion_actual,
@@ -78,7 +93,7 @@ class Planificador:
         """Busca todas las rutas posibles desde el nodo actual hasta el destino, evitando ciclos y considerando restricciones de vehículos y conexiones"""
         if actual == destino:
             max_cant_vehiculos = max((tramo[4] for tramo in ruta), default=0)
-            rutas_validas.append((acumulado, list(ruta), max_cant_vehiculos))
+            rutas_validas.append((acumulado_costo, acumulado_tiempo, list(ruta), max_cant_vehiculos))
             return
 
         visitados.add(actual)
@@ -96,7 +111,7 @@ class Planificador:
                 for vehiculo in self.vehiculos.values():
                     evaluacion = self.evaluar_ruta(vehiculo, conexion, peso, kpi)
                     if evaluacion is not None:
-                        valor, cant_vehiculos = evaluacion
+                        costo, tiempo, cant_vehiculos = evaluacion
 
                         ruta.append(
                             (actual, siguiente, vehiculo, conexion, cant_vehiculos)
@@ -112,7 +127,8 @@ class Planificador:
                             peso=peso,
                             kpi=kpi,
                             visitados=visitados,
-                            acumulado=acumulado + valor,
+                            acumulado_costo=acumulado_costo + costo,
+                            acumulado_tiempo=acumulado_tiempo + tiempo,
                             ruta=ruta,
                             rutas_validas=rutas_validas,
                             tipo_conexion_actual=nuevo_tipo,
@@ -124,19 +140,27 @@ class Planificador:
         # me fijo si existe ls conexion unica y sino intermediario
         # llamar las def que creemos en nodo
 
+    def evaluar_ruta(self, vehiculo, conexion, peso,kpi):
+        if not vehiculo.puede_recorrer(conexion, peso):
+            return None
+
+        costo_total, cant_vehiculos = vehiculo.calcular_costo_total(conexion.get_distancia(), peso), math.ceil(peso / vehiculo.get_capacidad())
+        tiempo = vehiculo.calcular_tiempo(conexion.get_distancia(), conexion.get_vel_max())
+
+        return costo_total, tiempo, cant_vehiculos
+
+
+"""
     def evaluar_ruta(self, vehiculo, conexion, peso, kpi):
-        """Calcula el costo o tiempo de recorrer una conexión con un vehículo, para una carga dada."""
+        #Calcula el costo o tiempo de recorrer una conexión con un vehículo, para una carga dada.
         if not vehiculo.puede_recorrer(conexion, peso):
             return None
 
         cant_vehiculos = math.ceil(peso / vehiculo.get_capacidad())
 
         if kpi == "costo":
-            valor = (
-                vehiculo.calcular_costo_total(
-                    conexion.get_distancia(), peso / cant_vehiculos
-                )
-                * cant_vehiculos
+            valor = vehiculo.calcular_costo_total(
+                conexion.get_distancia(), peso
             )
         elif kpi == "tiempo":
             valor = vehiculo.calcular_tiempo(
@@ -145,4 +169,4 @@ class Planificador:
         else:
             return None
 
-        return valor, cant_vehiculos
+        return valor, cant_vehiculos"""

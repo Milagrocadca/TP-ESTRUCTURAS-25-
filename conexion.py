@@ -1,10 +1,18 @@
 from random import random
+from validaciones import *
 class Conexion:
     '''Representa una conexión entre dos nodos (ciudades) mediante un tipo de transporte.
     Guarda información sobre el origen, destino, tipo de transporte, distancia y posibles restricciones 
     '''
 
     def __init__(self, origen, destino, tipo, distancia_km, restriccion=None, valor_restriccion=None):
+        
+        #if not validarTipo(tipo):
+        #    raise ValueError ("El tipo del tramo solo puede ser Ferroviaria, Automotor, Fluvial, Aerea")
+        if tipo.lower()=="ferroviaria":
+            tipo="ferroviario"
+        elif  tipo.lower()=="aerea":
+            tipo=="aerea"
         self.origen = origen
         self.destino = destino
         self.tipo = tipo  # Ej: "Ferroviaria", "Automotor", "Fluvial", "Aerea"
@@ -17,6 +25,9 @@ class Conexion:
         self.peso_max = float(valor_restriccion) if restriccion == "peso_max" else None
         self.tipo_agua = valor_restriccion if restriccion == "tipo" else None
         self.prob_mal_tiempo = float(valor_restriccion) if restriccion == "prob_mal_tiempo" else None
+        
+        print(f"Conexion({self.origen} → {self.destino}, tipo={self.tipo}, distancia={self.distancia}km, "
+                f"restriccion={self.restriccion}, valor={self.valor_restriccion})")
 
 
     #GETTER
@@ -69,3 +80,4 @@ class Conexion:
     def __str__(self):
         return (f"Conexion({self.origen} → {self.destino}, tipo={self.tipo}, distancia={self.distancia}km, "
                 f"restriccion={self.restriccion}, valor={self.valor_restriccion})")
+        

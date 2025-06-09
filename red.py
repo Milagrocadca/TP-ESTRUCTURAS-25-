@@ -8,10 +8,8 @@ from conexion import Conexion
 # cargar conexiones nos devuelve conexion
 class Red:
     def __init__(self):
-        self.path_nodos = "TP-ESTRUCTURAS-25--2-main/TP-ESTRUCTURAS-25--main/nodos.csv"
-        self.path_conexiones = (
-            "TP-ESTRUCTURAS-25--2-main/TP-ESTRUCTURAS-25--main/conexiones.csv"
-        )
+        self.path_nodos = 'nodos.csv'
+        self.path_conexiones =('conexiones.csv')
         self.red = (
             self.cargar_nodos()
         )  # red = {'nodo1':{}, 'nodo2':{}, ..., 'nodon':{}}

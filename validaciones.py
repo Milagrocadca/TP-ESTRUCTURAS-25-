@@ -4,8 +4,10 @@ def validarPositivo(num):
 
 
 def validarModo(modo):
-    return modo in ("automotor", "ferroviario", "aereo", "maritimo")
+    return modo.lower() in ("automotor", "ferroviario", "aereo", "maritimo", "fluvial")
 
+def validarTipo(modo):
+    return modo.lower() in ("automotor", "ferroviaria", "aerea", "maritimo", "fluvial")
 
 # HAY QUE AGREGAR LA VALIDACION DE METODO SI ES TIMEPO O COSTO\
 

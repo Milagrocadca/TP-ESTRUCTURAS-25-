@@ -1,6 +1,7 @@
-from inputs import *
+""" from inputs import *
 import conexion
 import math
+
 
 class Vehiculo:
     def __init__(
@@ -13,6 +14,7 @@ class Vehiculo:
         costo_km: float,
         costo_kg: float,
     ):
+        
         self.tipo = tipo
         self.modo = modo
         self.velocidad = velocidad
@@ -22,27 +24,27 @@ class Vehiculo:
         self.costo_kg = costo_kg
 
     def calcular_costo_total(self, distancia, peso):
-        cantidad_vehiculos = math.ceil(peso / self.capacidad)
-        peso_restante = peso
-        costo_total = 0
+         cantidad_vehiculos = math.ceil(peso / self.capacidad)
+         peso_restante = peso
+         costo_total = 0
 
-        for _ in range(cantidad_vehiculos):
-            carga = min(peso_restante, self.capacidad)
-            costo_vehiculo = (
-                self.costo_fijo +
-                self.costo_km * distancia +
-                self.costo_kg * carga
-            )
-            costo_total += costo_vehiculo
-            peso_restante -= carga
+         for _ in range(cantidad_vehiculos):
+             carga = min(peso_restante, self.capacidad)
+             costo_vehiculo = (
+                 self.costo_fijo +
+                 self.costo_km * distancia +
+                 self.costo_kg * carga
+             )
+             costo_total += costo_vehiculo
+             peso_restante -= carga
 
-        return costo_total
+         return costo_total
 
     def calcular_tiempo(self, distancia, velocidad_limite=None):
-        """
-        Tiempo en minutos que tarda en recorrer un tramo.
-        Si hay velocidad límite, la respeta.
-        """
+        
+        #Tiempo en horas que tarda en recorrer un tramo.
+        #Si hay velocidad límite, la respeta.
+        
         velocidad_final = (
             min(self.velocidad, velocidad_limite)
             if velocidad_limite
@@ -100,26 +102,21 @@ class Vehiculo:
 
 class Vehiculos:
     def __init__(self):
-        self.vehiculos = dict()  # tipo de vehiculo es único
+        self.vehiculos = dict()  # Asumimos que tipo vehiculo es unico
 
     def addVehiculo(self):
         print("\n===== AGREGAR VEHICULO =====")
-        print("Opciones: Camión, Tren de Carga, Avión, Barco (fluvial), Barco (maritimo)")
-        tipo = input("Tipo vehiculo: ").strip().lower()
+        tipo = input("Tipo vehiculo: ")  # Cualquier tipo de vehiculo
+        modo = inputModo()
+        #velocidad = inputNumPositivo("Velocidad: ")  # Validar velocidad numero positivo
+        #capacidad = inputNumPositivo("Capacidad: ")  # Validar capacidad numero positivo
+        #costo_fijo = inputNumPositivo("Costo fijo: ")  # Validar costo fijo numero positivo
+        #costo_km = inputNumPositivo("Costo por km: ")  # Validar costo km numero positivo
+        #costo_kg = inputNumPositivo("Costo por kg: ")  # Validar costo kg numero positivo
 
-        if tipo in ["camión", "camion"]:
-            self.vehiculos["Camión"] = Automotor()
-        elif tipo in ["tren de carga", "tren"]:
-            self.vehiculos["Tren de Carga"] = Tren()
-        elif tipo in ["avión", "avion"]:
-            # Si necesitás pasar una conexión real, ajusta aquí
-            self.vehiculos["Avión"] = Aereo(None)
-        elif tipo == "barco (fluvial)":
-            self.vehiculos["Barco (fluvial)"] = Maritimo("fluvial")
-        elif tipo == "barco (maritimo)":
-            self.vehiculos["Barco (maritimo)"] = Maritimo("maritimo")
-        else:
-            print("Tipo de vehículo no reconocido.")
+        self.vehiculos[tipo] = Vehiculo(
+            tipo, modo, velocidad, capacidad, costo_fijo, costo_km, costo_kg
+        )
 
     def removeVehiculo(self):
         tipo = input("Tipo vehiculo a remover: ")
@@ -129,7 +126,7 @@ class Vehiculos:
             print("El tipo de vehiculo a eliminar no existe.")
 
     def getListVehiculos(self):
-        return list(self.vehiculos.values())
+        return list(self.vehiculos)
 
     def getInfoVehiculos(self):
         return self.vehiculos
@@ -140,6 +137,7 @@ class Vehiculos:
             print(
                 f"{tipo} | {vehiculo.modo} | {vehiculo.velocidad} | {vehiculo.capacidad} | {vehiculo.costo_fijo} | {vehiculo.costo_km} | {vehiculo.costo_kg}"
             )
+
 
 class Automotor(Vehiculo):
     def __init__(self):
@@ -183,7 +181,7 @@ class Tren(Vehiculo):
             costo_kg=3,
         )
 
-    """     def calcular_costo_total(self, distancia, peso):
+    def calcular_costo_total(self, distancia, peso):
         cantidad_vehiculos = math.ceil(peso / self.capacidad)
         peso_restante = peso
         costo_total = 0
@@ -199,37 +197,11 @@ class Tren(Vehiculo):
             costo_total += costo_vehiculo
             peso_restante -= carga
 
-        return costo_total """
-    
-
-    def calcular_costo_total(distancia_tramo1, distancia_tramo2, peso_total, capacidad, costo_fijo, costo_km):
-        cantidad_vehiculos = math.ceil(peso_total / capacidad)
-
-        # Distribuir la carga llenando vehículos a tope
-        cargas = [capacidad] * (cantidad_vehiculos - 1)
-        cargas.append(peso_total - sum(cargas))
-
-        costo_total = 0
-
-        for carga in cargas:
-            # Costo por kg para modo automotor
-            costo_kg = 1 if carga < 15000 else 2
-
-            # Costo total para ambos tramos
-            costo_fijo_camion = 2 * costo_fijo  # Se paga el costo fijo por cada tramo
-            costo_km_camion = costo_km * (distancia_tramo1 + distancia_tramo2)
-            costo_carga = carga * costo_kg
-
-            costo_total += costo_fijo_camion + costo_km_camion + costo_carga
-
         return costo_total
 
 class Aereo(Vehiculo):
-    def __init__(self, conexion):
-        # Si no hay conexión, usar velocidad por defecto
-        velocidad = 400
-        if conexion is not None and hasattr(conexion, "get_mal_clima"):
-            velocidad = 400 if conexion.get_mal_clima() else 600
+    def __init__(self, conexion: conexion):
+        velocidad = 400 if conexion.get_mal_clima() else 600
         super().__init__(
             tipo="Avión",
             modo="aereo",
@@ -239,6 +211,7 @@ class Aereo(Vehiculo):
             costo_km=40,
             costo_kg=10,
         )
+
 
 class Maritimo(Vehiculo):
     def __init__(self, tipo_agua, calado_necesario=None):
@@ -253,4 +226,4 @@ class Maritimo(Vehiculo):
             costo_kg=2,
         )
         self.tipo_agua = tipo_agua
-        self.calado_necesario = calado_necesario
+        self.calado_necesario = calado_necesario """

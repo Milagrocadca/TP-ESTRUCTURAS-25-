@@ -34,7 +34,7 @@ def main():
             tipos_vehiculos.printVehiculos()
 
         if opcion == "4":
-            archivo = "TP-ESTRUCTURAS-25--2-main\TP-ESTRUCTURAS-25--main\solicitudes.csv"  # input("Ingrese el archivo: ")
+            archivo = 'solicitudes.csv'  # input("Ingrese el archivo: ")
             solicitudes = Solicitud.cargar_solicitudes(archivo)
             from planificador import (
                 Planificador,

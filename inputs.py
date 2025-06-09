@@ -2,27 +2,23 @@ from validaciones import *
 
 
 def inputNumPositivo(titulo):
-    flag = True
-    while flag:
+    seguir= True
+    while seguir:
         try:
-            val = float(input(titulo))
-            if validarPositivo(val):
-                flag = False
+            valor = float(input(titulo))
+            if validarPositivo(valor):
+                seguir = False
             else:
-                print(
-                    "\t El valor ingresado debe ser un numero positivo. Intente nuevamente"
-                )
+                print("El valor ingresado debe ser un numero positivo. Intente nuevamente")
         except ValueError:
-            print(
-                "\t Error! El valor ingresado debe ser un numero positivo. Intente nuevamente"
-            )
-    return val
+            print("El valor ingresado debe ser un numero positivo. Intente nuevamente")
+    return valor
 
 
 def inputModo():
-    modo = input("\t >Modo transporte: ")  # Validar modo de transporte
+    modo = input("Modo transporte: ")  # Validar modo de transporte
     while not validarModo(modo):
-        modo = input("\t >Modo transporte: ")  # Validar modo de transporte
+        modo = input("Modo transporte: ")  # Validar modo de transporte
 
     return modo
 
