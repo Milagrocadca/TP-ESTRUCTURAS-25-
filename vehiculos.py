@@ -92,10 +92,12 @@ class Vehiculo:
     def puede_recorrer(self, tramo, peso):
         if tramo.get_tipo().lower() != self.modo:
             return False
+        '''
         if tramo.get_peso_max() is not None and peso > tramo.get_peso_max():
             return False
         if tramo.get_vel_max() is not None and self.velocidad > tramo.get_vel_max():
             return False
+        '''
         return True
 
 class Vehiculos:
@@ -183,7 +185,7 @@ class Tren(Vehiculo):
             costo_kg=3,
         )
 
-    """     def calcular_costo_total(self, distancia, peso):
+    def calcular_costo_total(self, distancia, peso):
         cantidad_vehiculos = math.ceil(peso / self.capacidad)
         peso_restante = peso
         costo_total = 0
@@ -199,30 +201,8 @@ class Tren(Vehiculo):
             costo_total += costo_vehiculo
             peso_restante -= carga
 
-        return costo_total """
-    
+        return costo_total 
 
-    def calcular_costo_total(distancia_tramo1, distancia_tramo2, peso_total, capacidad, costo_fijo, costo_km):
-        cantidad_vehiculos = math.ceil(peso_total / capacidad)
-
-        # Distribuir la carga llenando vehículos a tope
-        cargas = [capacidad] * (cantidad_vehiculos - 1)
-        cargas.append(peso_total - sum(cargas))
-
-        costo_total = 0
-
-        for carga in cargas:
-            # Costo por kg para modo automotor
-            costo_kg = 1 if carga < 15000 else 2
-
-            # Costo total para ambos tramos
-            costo_fijo_camion = 2 * costo_fijo  # Se paga el costo fijo por cada tramo
-            costo_km_camion = costo_km * (distancia_tramo1 + distancia_tramo2)
-            costo_carga = carga * costo_kg
-
-            costo_total += costo_fijo_camion + costo_km_camion + costo_carga
-
-        return costo_total
 
 class Aereo(Vehiculo):
     def __init__(self, conexion):

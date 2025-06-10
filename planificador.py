@@ -3,8 +3,7 @@ import math
 from itinerario import Itinerario
 from conexion import Conexion
 from nodos import Nodo
-
-
+from vehiculos import *
 class Planificador:
     """Busca todas las rutas posibles entre el origen y destino de la solicitud, usando los vehículos disponibles y el criterio de optimización"""
 
@@ -18,8 +17,7 @@ class Planificador:
         peso = solicitud.get_peso()
         visitados = set()
         ruta = []
-        rutas_validas = []
-        self._dfs(
+        rutas_validas = self._dfs(
             actual=origen,
             destino=destino,
             peso=peso,
@@ -28,7 +26,7 @@ class Planificador:
             acumulado_costo=0,
             acumulado_tiempo=0,
             ruta=ruta,
-            rutas_validas=rutas_validas,
+            rutas_validas=[],
             tipo_conexion_actual=None,
         )
         if not rutas_validas:
@@ -52,6 +50,7 @@ class Planificador:
 
         indice_kpi = 0 if kpi == "costo" else 1
         mejor = min(rutas_validas, key=lambda r: r[indice_kpi])
+        print(rutas_validas)
 
         costo_total = mejor[0]
         tiempo_total = mejor[1]
@@ -94,7 +93,7 @@ class Planificador:
         if actual == destino:
             max_cant_vehiculos = max((tramo[4] for tramo in ruta), default=0)
             rutas_validas.append((acumulado_costo, acumulado_tiempo, list(ruta), max_cant_vehiculos))
-            return
+            return rutas_validas
 
         visitados.add(actual)
         nodo_actual = self.nodos[actual]
@@ -121,7 +120,7 @@ class Planificador:
                             if tipo_conexion_actual is None
                             else tipo_conexion_actual
                         )
-                        self._dfs(
+                        rutas_validas=self._dfs(
                             actual=siguiente,
                             destino=destino,
                             peso=peso,
@@ -135,6 +134,7 @@ class Planificador:
                         )
                         ruta.pop()
         visitados.remove(actual)
+        return rutas_validas
 
         # tiene todas los  y vehciulos
         # me fijo si existe ls conexion unica y sino intermediario
