@@ -30,6 +30,11 @@ Lunes 9 de junio:
     Pensamos los graficos a realizar.
     Resolvimos los calculos de tiempo.
     Corregimos el print de itinerario, ahora imprime costo total y tiempo total siempre. Luego elige la mejor opcion segun el kpi elegido
-    
+
+Martes 10 de junio: 
+    Teniamos problemas con caluclar el kpi, estuvimos toda la clase con el ayudante hasta que encontramos nuestro error. 
+    Ademas notamos que los calculos propuestos por la cateria podrian estar mal. 
+
+
     
 
