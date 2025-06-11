@@ -17,7 +17,7 @@ def main():
         print("2. Remover vehiculo")
         print("3. Ver lista vehiculos")
         print("4. Agregar solicitud")
-        print("5. Mostrar graficos de la solicitud")
+        print("5. Mostrar graficos de los itinerarios creados")
         print("6. Salir")
         
 
@@ -62,7 +62,7 @@ def main():
                         print(f"\n Ruta más barata para solicitud {solicitud.get_id()}:\n")
                         print(itinerario_costo)
                     if itinerario_tiempo:
-                        print(f"\n⏱ Ruta más rápida para solicitud {solicitud.get_id()}:\n")
+                        print(f"\n Ruta más rápida para solicitud {solicitud.get_id()}:\n")
                         print(itinerario_tiempo)
 
         """if opcion == "4":
@@ -83,15 +83,60 @@ def main():
                     print(
                         f"No se encontró itinerario para la solicitud {solicitud.get_id()}"
                     )"""
+
+            
         if opcion == "5":
-            print("Mostrando graficos...")
+            print("Buscando los graficos...")
+            
+            if itinerario_costo and itinerario_tiempo:
+                if itinerario_costo==itinerario_tiempo:
+                    print("Mostrando los graficos de...")
+                    print("---Itinerario de costo y tiempo a la vez---")
+                    graficar_distancia_vs_tiempo(itinerario_costo)
+                    graficar_costo_vs_distancia(itinerario_costo)
+                else:
+                    print("Mostrando la comparacion de graficos de itinerario costo y tiempo...")
+                    graficar_comparacion_itinerarios(itinerario_costo, itinerario_tiempo)
+                    
+                    print("Mostrando los graficos de...")
+                    print("---Itinerario de costo---")
+                    graficar_distancia_vs_tiempo(itinerario_costo)
+                    graficar_costo_vs_distancia(itinerario_costo)
+                    
+                    print("Mostrando los graficos de...")
+                    print("\n---Itinerario de tiempo---")
+                    graficar_distancia_vs_tiempo(itinerario_tiempo)
+                    graficar_costo_vs_distancia(itinerario_tiempo)
+
+
+            elif itinerario_costo:
+                print("Mostrando los graficos de...")
+                print("---Itinerario de costo---")
+                graficar_distancia_vs_tiempo(itinerario_costo)
+                graficar_costo_vs_distancia(itinerario_costo)
+
+            elif itinerario_tiempo:
+                print("Mostrando los graficos de...")
+                print("\n---Itinerario de tiempo---")
+                graficar_distancia_vs_tiempo(itinerario_tiempo)
+                graficar_costo_vs_distancia(itinerario_tiempo)
+
             archivo='solicitudes.csv'
             planificador = Planificador(
                 red_nodos.get_red(), tipos_vehiculos.getInfoVehiculos()
             )
             solicitudes = Solicitud.cargar_solicitudes(archivo)
-            #itinerario = planificador.planificar(solicitud)
-            #graficos.graficar_distancia_vs_tiempo(itinerario)
+            itinerarios_validos = []
+            for solicitud in solicitudes:
+                itinerario = planificador.planificar(solicitud, kpi="costo")
+                if itinerario:
+                    itinerarios_validos.append(itinerario)
+            if itinerarios_validos:
+                print("Mostrando graficos de itinerarios validos...")
+                graficar_costo_total_vs_modo(itinerarios_validos)
+                graficar_tiempo_total_vs_modo(itinerarios_validos)
+            else:
+                print("No hay itinerarios válidos para graficar.")
 
         if opcion == "6":
             flag = False
