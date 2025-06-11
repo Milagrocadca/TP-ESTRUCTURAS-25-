@@ -117,7 +117,7 @@ class Planificador:
             )  # revisa que sea el primero o siga el camino por el mismo tipo de vehiculo
             no_visitado = siguiente not in visitados
             if es_tipo_valido and no_visitado:
-                # <-- PROBLEMA: la variable vehiculos es la lista de vehiculo. Pero no menciona si es automotor, aereo, maritimo, etc.
+                #la variable vehiculos es la lista de vehiculo. Pero no menciona si es automotor, aereo, maritimo, etc.
                 for vehiculo in self.vehiculos.values():
                     evaluacion = self.evaluar_ruta(vehiculo, conexion, peso, kpi)
                     if evaluacion is not None:
@@ -147,9 +147,6 @@ class Planificador:
         visitados.remove(actual)
         return rutas_validas
 
-        # tiene todas los  y vehciulos
-        # me fijo si existe ls conexion unica y sino intermediario
-        # llamar las def que creemos en nodo
 
     def get_itinerarios_validos(self):
         return self.itinerarios_validos
@@ -165,6 +162,10 @@ class Planificador:
             conexion.get_distancia(), conexion.get_vel_max()
         )
 
+
+        print('cantidad de vehiculos',cant_vehiculos)
+        print('peso',peso)
+        print('capacidad',vehiculo.get_capacidad())
         return costo_total, tiempo, cant_vehiculos
 
 

@@ -33,8 +33,18 @@ Lunes 9 de junio:
 
 Martes 10 de junio: 
     Teniamos problemas con caluclar el kpi, estuvimos toda la clase con el ayudante hasta que encontramos nuestro error. 
-    Ademas notamos que los calculos propuestos por la cateria podrian estar mal. 
+    Ademas notamos que los calculos propuestos por la catedra podrian estar mal.
+
+Miercoles 11 de junio:
+    Terminamos de solucionar problemas que teniamos con los graficos. Y creamos un grafico extra.
+    Solucionamos varios problemas en el main, como pedia las solicitudes, como se presentaban las opciones a elegir
+    Notamos que teniamos problemas con como habiamos entendido que funcionaba restriccion y valor_restriccion en el archivo de conexiones, entonces hicimos cambios en la clase vehiculos
 
 
+
+
+ACLARACIONES:
+- El programa detecta que no se pueden agregar mas de una vez el mismo vehiculo
+- Al imprimirse los vehiculos con su informacion Costo kg es cero en camion y Costo km es cero en tren de carga porque por default al principio vale eso. 
     
 

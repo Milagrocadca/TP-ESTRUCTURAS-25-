@@ -12,7 +12,7 @@ class Conexion:
         if tipo.lower()=="ferroviaria":
             tipo="ferroviario"
         elif  tipo.lower()=="aerea":
-            tipo=="aerea"
+            tipo="aereo"
         self.origen = origen
         self.destino = destino
         self.tipo = tipo  # Ej: "Ferroviaria", "Automotor", "Fluvial", "Aerea"
