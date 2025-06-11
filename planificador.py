@@ -4,12 +4,15 @@ from itinerario import Itinerario
 from conexion import Conexion
 from nodos import Nodo
 from vehiculos import *
+
+
 class Planificador:
     """Busca todas las rutas posibles entre el origen y destino de la solicitud, usando los vehículos disponibles y el criterio de optimización"""
 
     def __init__(self, nodos, vehiculos):
         self.nodos = nodos
         self.vehiculos = vehiculos
+        self.itinerarios_validos = []
 
     def planificar(self, solicitud, kpi="costo"):
         origen = solicitud.get_origen()
@@ -32,25 +35,31 @@ class Planificador:
         if not rutas_validas:
             return None
 
-        """
-        mejor = None
         for ruta in rutas_validas:
-            valor = ruta[0]
-            if mejor == None:
-                mejor = ruta
-            elif valor < mejor[0]:
-                mejor = ruta
-
-        tramos_completos = mejor[1]
-        kpi_total = mejor[0]
-        max_cant_vehiculos = mejor[2]
-        """
-        if not rutas_validas:
-            return None
+            costo_total = ruta[0]
+            tiempo_total = ruta[1]
+            tramos_completos = ruta[2]
+            max_cant_vehiculos = ruta[3]
+            primer_tramo = tramos_completos[0]
+            vehiculo_usado = primer_tramo[2]
+            tramos = [
+                (inicio, fin, conexion)
+                for (inicio, fin, _, conexion, _) in tramos_completos
+            ]
+            self.itinerarios_validos.append(
+                Itinerario(
+                    solicitud=solicitud,
+                    vehiculo=vehiculo_usado,
+                    tramos=tramos,
+                    costo_total=costo_total,
+                    tiempo_total=tiempo_total,
+                    kpi_tipo=kpi,
+                    max_cant_vehiculos=max_cant_vehiculos,
+                )
+            )
 
         indice_kpi = 0 if kpi == "costo" else 1
         mejor = min(rutas_validas, key=lambda r: r[indice_kpi])
-        print(rutas_validas)
 
         costo_total = mejor[0]
         tiempo_total = mejor[1]
@@ -69,7 +78,7 @@ class Planificador:
             solicitud=solicitud,
             vehiculo=vehiculo_usado,
             tramos=tramos,
-            #pi_total=kpi_total,
+            # pi_total=kpi_total,
             costo_total=costo_total,
             tiempo_total=tiempo_total,
             kpi_tipo=kpi,
@@ -92,7 +101,9 @@ class Planificador:
         """Busca todas las rutas posibles desde el nodo actual hasta el destino, evitando ciclos y considerando restricciones de vehículos y conexiones"""
         if actual == destino:
             max_cant_vehiculos = max((tramo[4] for tramo in ruta), default=0)
-            rutas_validas.append((acumulado_costo, acumulado_tiempo, list(ruta), max_cant_vehiculos))
+            rutas_validas.append(
+                (acumulado_costo, acumulado_tiempo, list(ruta), max_cant_vehiculos)
+            )
             return rutas_validas
 
         visitados.add(actual)
@@ -120,7 +131,7 @@ class Planificador:
                             if tipo_conexion_actual is None
                             else tipo_conexion_actual
                         )
-                        rutas_validas=self._dfs(
+                        rutas_validas = self._dfs(
                             actual=siguiente,
                             destino=destino,
                             peso=peso,
@@ -140,12 +151,19 @@ class Planificador:
         # me fijo si existe ls conexion unica y sino intermediario
         # llamar las def que creemos en nodo
 
-    def evaluar_ruta(self, vehiculo, conexion, peso,kpi):
+    def get_itinerarios_validos(self):
+        return self.itinerarios_validos
+
+    def evaluar_ruta(self, vehiculo, conexion, peso, kpi):
         if not vehiculo.puede_recorrer(conexion, peso):
             return None
 
-        costo_total, cant_vehiculos = vehiculo.calcular_costo_total(conexion.get_distancia(), peso), math.ceil(peso / vehiculo.get_capacidad())
-        tiempo = vehiculo.calcular_tiempo(conexion.get_distancia(), conexion.get_vel_max())
+        costo_total, cant_vehiculos = vehiculo.calcular_costo_total(
+            conexion.get_distancia(), peso
+        ), math.ceil(peso / vehiculo.get_capacidad())
+        tiempo = vehiculo.calcular_tiempo(
+            conexion.get_distancia(), conexion.get_vel_max()
+        )
 
         return costo_total, tiempo, cant_vehiculos
 

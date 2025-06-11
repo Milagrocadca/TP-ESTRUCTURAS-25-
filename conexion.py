@@ -80,4 +80,3 @@ class Conexion:
     def __str__(self):
         return (f"Conexion({self.origen} → {self.destino}, tipo={self.tipo}, distancia={self.distancia}km, "
                 f"restriccion={self.restriccion}, valor={self.valor_restriccion})")
-        
