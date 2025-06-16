@@ -138,7 +138,7 @@ class Vehiculos:
             "c": "Avión",
             "d": "Barco (fluvial)",
             "e": "Barco (maritimo)"
-        }
+            }
 
         tipo = tipos.get(opcion)
         if tipo and tipo in self.vehiculos:

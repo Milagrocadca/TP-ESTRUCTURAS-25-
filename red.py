@@ -15,9 +15,8 @@ class Red:
             self.cargar_nodos()
         )  # red = {'nodo1':{}, 'nodo2':{}, ..., 'nodon':{}}
         self.cargar_conexiones()
-        print(f"Nodos cargados: {list(self.red.keys())}")
-        for nombre, nodo in self.red.items():
-            print(f"{nombre}: {len(nodo.conexiones)} conexiones")
+
+
     def cargar_nodos(self):
         """
         Lee el archivo de nodos y crea un diccionario de objetos Nodo para cada ciudad/punto.

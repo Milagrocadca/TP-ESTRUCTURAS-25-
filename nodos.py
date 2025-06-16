@@ -25,4 +25,4 @@ class Nodo:
         return modo in self.modos
 
     def __repr__(self):
-        return f"Nodo({self.nombre}, modos={self.modos})"
+         return f"Nodo({self.nombre}, modos={self.modos})"

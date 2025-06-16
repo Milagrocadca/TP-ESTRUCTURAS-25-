@@ -40,6 +40,9 @@ Miercoles 11 de junio:
     Solucionamos varios problemas en el main, como pedia las solicitudes, como se presentaban las opciones a elegir
     Notamos que teniamos problemas con como habiamos entendido que funcionaba restriccion y valor_restriccion en el archivo de conexiones, entonces hicimos cambios en la clase vehiculos
 
+Lunes 16 de junio:
+    Corregimos las nuevas pautas recientes.
+    Probamos todos los requisitos que debia cumplir nuestro codigos, y lo cumple con satisfaccion.
 
 
 
@@ -48,6 +51,7 @@ ACLARACIONES:
 - Al imprimirse los vehiculos con su informacion Costo kg es cero en camion y Costo km es cero en tren de carga porque por default al principio vale eso. 
 - Si hay dos itinerarios que tienen el mismo valor minimo (ejemplo: si el tiempo minimo es igual en ambos), devuelve el primer itinerario que se crea
 - Toda solicitud debe tener un id_carga unico y no nulo
+- Los graficos imprimen por solicitud. Por lo tanto, una solicitud tiene los graficos de kpi costo y tiempo.
 
     
 
