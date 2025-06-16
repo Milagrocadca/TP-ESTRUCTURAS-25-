@@ -3,10 +3,11 @@ import numpy as np
 from nodos import Nodo
 from conexion import Conexion
 
-
-# crear clase red que en el init de red tenga cargar nodo y cargar conexiones. tener los nodos y hacer un self.nodos
-# cargar conexiones nos devuelve conexion
 class Red:
+    """
+    Inicializa la red de nodos y conexiones a partir de archivos CSV.
+    Carga los nodos y luego las conexiones entre ellos.
+    """
     def __init__(self):
         self.path_nodos = 'nodos.csv'
         self.path_conexiones =('conexiones.csv')
@@ -18,6 +19,10 @@ class Red:
         for nombre, nodo in self.red.items():
             print(f"{nombre}: {len(nodo.conexiones)} conexiones")
     def cargar_nodos(self):
+        """
+        Lee el archivo de nodos y crea un diccionario de objetos Nodo para cada ciudad/punto.
+        Devuelve un diccionario con los nombres de los nodos como claves.
+        """
         nodos = {}
         with open(self.path_nodos, newline="", encoding="utf-8") as archivo:
             reader = csv.DictReader(archivo)
@@ -38,6 +43,10 @@ class Red:
 
     @staticmethod
     def cargar_conexion(row):
+        """
+    Crea dos objetos Conexion (ida y vuelta) a partir de una fila del archivo CSV de conexiones.
+    Devuelve los nodos de origen y destino, el modo, y ambas conexiones.
+    """
         try:
             origen = row["origen"]
             destino = row["destino"]
@@ -62,6 +71,10 @@ class Red:
             return None
 
     def cargar_conexiones(self):
+        """
+        Lee el archivo de conexiones y agrega cada conexión a los nodos correspondientes en la red.
+        También actualiza los modos de transporte habilitados para cada nodo.
+        """
         try:
             with open(self.path_conexiones, newline="", encoding="utf-8") as archivo:
                 reader = csv.DictReader(archivo)
@@ -86,4 +99,7 @@ class Red:
             print(f"Error general al cargar conexiones: {e}")
 
     def get_red(self):
+        """
+    Devuelve el diccionario completo de la red de nodos con sus conexiones.
+    """
         return self.red

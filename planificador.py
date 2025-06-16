@@ -15,6 +15,10 @@ class Planificador:
         self.itinerarios_validos = []
 
     def planificar(self, solicitud, kpi="costo"):
+        """
+    Calcula el costo total por kg para el caso de automotor (camión),
+    considerando que cada camión puede tener diferente carga y costo por kg.
+    """
         origen = solicitud.get_origen()
         destino = solicitud.get_destino()
         peso = solicitud.get_peso()
@@ -66,13 +70,22 @@ class Planificador:
         tramos_completos = mejor[2]
         max_cant_vehiculos = mejor[3]
 
-        # separar vehículo único y tramos sin vehículo
+        # Separar vehículo único y tramos sin vehículo
         primer_tramo = tramos_completos[0]
         vehiculo_usado = primer_tramo[2]
         tramos = [
             (inicio, fin, conexion)
             for (inicio, fin, _, conexion, _) in tramos_completos
         ]
+        peso = solicitud.get_peso()
+
+        # Lógica especial para Automotor
+        if vehiculo_usado.get_tipo() == "Camión":
+            costo_kg_total = self.calcular_costo_kg_automotor(vehiculo_usado, peso)
+        else:
+            costo_kg_total = vehiculo_usado.get_costo_kg() * peso
+
+        costo_total += costo_kg_total
 
         return Itinerario(
             solicitud=solicitud,
@@ -84,7 +97,24 @@ class Planificador:
             kpi_tipo=kpi,
             max_cant_vehiculos=max_cant_vehiculos,
         )
+    def calcular_costo_kg_automotor(self, vehiculo, peso_total):
 
+        """
+        Realiza una búsqueda en profundidad (DFS) para encontrar todas las rutas posibles
+        desde el nodo actual hasta el destino, evitando ciclos y considerando restricciones
+        de vehículos y conexiones.
+        """
+        capacidad = vehiculo.get_capacidad()
+        pesos = []
+        while peso_total > 0:
+            carga = min(capacidad, peso_total)
+            pesos.append(carga)
+            peso_total -= carga
+        costo = 0
+        for carga in pesos:
+            costo_kg = 1 if carga < 15000 else 2
+            costo += costo_kg * carga
+        return costo
     def _dfs(
         self,
         actual,
@@ -149,43 +179,33 @@ class Planificador:
 
 
     def get_itinerarios_validos(self):
+        """
+    Devuelve la lista de itinerarios válidos encontrados en la última planificación.
+    """
         return self.itinerarios_validos
 
     def evaluar_ruta(self, vehiculo, conexion, peso, kpi):
-        if not vehiculo.puede_recorrer(conexion, peso):
+        """
+            Evalúa si un vehículo puede recorrer una conexión con el peso dado.
+            Si es posible, calcula y retorna:
+            - el costo del tramo (sin costo por kg para camión),
+            - el tiempo necesario para recorrer el tramo (considerando clima si es aéreo),
+            - y la cantidad de vehículos necesarios para ese tramo.
+            Si el vehículo no puede recorrer la conexión, retorna None.
+            """
+        if not vehiculo.puede_recorrer(conexion):
             return None
 
-        costo_total, cant_vehiculos = vehiculo.calcular_costo_total(
-            conexion.get_distancia(), peso
-        ), math.ceil(peso / vehiculo.get_capacidad())
-        tiempo = vehiculo.calcular_tiempo(
-            conexion.get_distancia(), conexion.get_vel_max()
-        )
-
-
-        print('cantidad de vehiculos',cant_vehiculos)
-        print('peso',peso)
-        print('capacidad',vehiculo.get_capacidad())
-        return costo_total, tiempo, cant_vehiculos
-
-
-"""
-    def evaluar_ruta(self, vehiculo, conexion, peso, kpi):
-        #Calcula el costo o tiempo de recorrer una conexión con un vehículo, para una carga dada.
-        if not vehiculo.puede_recorrer(conexion, peso):
-            return None
+        # Para Automotor, obtener ambos valores; para otros, solo el costo
+        if vehiculo.get_tipo() == "Camión":
+            costo, _ = vehiculo.calcular_costo_total(conexion.get_distancia(), peso)
+        else:
+            costo = vehiculo.calcular_costo_total(conexion.get_distancia(), peso)
 
         cant_vehiculos = math.ceil(peso / vehiculo.get_capacidad())
-
-        if kpi == "costo":
-            valor = vehiculo.calcular_costo_total(
-                conexion.get_distancia(), peso
-            )
-        elif kpi == "tiempo":
-            valor = vehiculo.calcular_tiempo(
-                conexion.get_distancia(), conexion.get_vel_max()
-            )
+        if isinstance(vehiculo, Aereo):
+            tiempo = vehiculo.calcular_tiempo(conexion.get_distancia(), conexion)
         else:
-            return None
+            tiempo = vehiculo.calcular_tiempo(conexion.get_distancia(), conexion.get_vel_max())
 
-        return valor, cant_vehiculos"""
+        return costo, tiempo, cant_vehiculos

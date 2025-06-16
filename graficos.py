@@ -1,4 +1,4 @@
-from vehiculo import *
+
 from conexion import *
 from itinerario import *
 import matplotlib.pyplot as plt
@@ -7,6 +7,10 @@ import numpy as np
 
 
 def graficar_distancia_vs_tiempo(itinerario):
+    """
+    Grafica la distancia acumulada recorrida en función del tiempo acumulado.
+    Cada punto representa el avance tras cada tramo del itinerario.
+    """
     # Obtener los tramos del itinerario
     tramos = itinerario.get_tramos()
     vehiculo = itinerario.get_vehiculo()
@@ -41,6 +45,10 @@ def graficar_distancia_vs_tiempo(itinerario):
 
 
 def graficar_costo_vs_distancia(itinerario):
+    """
+    Grafica el costo total acumulado por cada modo de transporte.
+    Agrupa todos los itinerarios válidos por modo y suma sus costos.
+    """
     tramos = itinerario.get_tramos()
     vehiculo = itinerario.get_vehiculo()
 
@@ -103,7 +111,10 @@ def graficar_costo_total_vs_modo(itinerarios_validos):
 
 
 def graficar_tiempo_total_vs_modo(itinerarios_validos):
-    from collections import defaultdict
+    """
+    Grafica una comparación entre dos itinerarios (uno optimizado por costo y otro por tiempo).
+    Muestra barras agrupadas para costo total, tiempo total y cantidad de tramos de cada itinerario.
+    """
 
     modo_tiempos = defaultdict(float)
     for itinerario in itinerarios_validos:

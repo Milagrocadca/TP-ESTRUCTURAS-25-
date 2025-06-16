@@ -39,11 +39,25 @@ def main():
         if opcion == "4":
             if not ejecutado:
                 ejecutado = True
-                archivo = "solicitudes.csv"
+
+                solicitudes = []
+                while not solicitudes:
+                    path = input("Ingrese la ruta del archivo de solicitudes: ")
+                    try:
+                        solicitudes = Solicitud.cargar_solicitudes(path)
+                    except FileNotFoundError as e:
+                        print(f"Archivo no encontrado: {e}")
+                    except ValueError as e:
+                        print(f"Error en los datos del archivo: {e}")
+                    # el while sigue automáticamente si 'solicitudes' sigue vacío
+
+                if solicitudes:
+                    print(f"Se cargaron {len(solicitudes)} solicitudes correctamente.")
+                    # Podés continuar con el resto del código aquí
+                
                 planificador = Planificador(
                     red_nodos.get_red(), tipos_vehiculos.getInfoVehiculos()
                 )
-                solicitudes = Solicitud.cargar_solicitudes(archivo)
 
                 for solicitud in solicitudes:
                     itinerario_costo = planificador.planificar(solicitud, kpi="costo")

@@ -26,8 +26,7 @@ class Conexion:
         self.tipo_agua = valor_restriccion if restriccion == "tipo" else None
         self.prob_mal_tiempo = float(valor_restriccion) if restriccion == "prob_mal_tiempo" else None
         
-        print(f"Conexion({self.origen} → {self.destino}, tipo={self.tipo}, distancia={self.distancia}km, "
-                f"restriccion={self.restriccion}, valor={self.valor_restriccion})")
+        
 
 
     #GETTER
@@ -61,14 +60,14 @@ class Conexion:
     def get_prob_mal_tiempo(self):
         return self.prob_mal_tiempo
 
-    @staticmethod
+  
     def get_mal_clima(self):
         if self.tipo=="aerea":
             numero = random()
-            if random < self.prob_mal_tiempo:
+            if numero < self.prob_mal_tiempo:
                 return True
             else:
-                return False   #retorna Flase si hay buen clima
+                return False   #retorna False si hay buen clima
 
     #SIN SETTER ya que estan cargados desde un archivo
 

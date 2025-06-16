@@ -6,7 +6,9 @@ class Solicitud:
     ids_usados = set()
     
     def __init__(self, id_carga: str, peso: float, origen: str, destino: str):
-        if id_carga in Solicitud.ids_usados:
+        if id_carga is None or id_carga.strip() == "":
+            raise ValueError("El ID de la solicitud no puede estar vacío")
+        elif id_carga in Solicitud.ids_usados:
             raise ValueError('Ya existe una solicitud con ese ID')
         elif not validarPositivo(peso):
             raise ValueError("El peso del vehículo ingresado no se encuentra dentro de las opciones disponibles")
@@ -54,6 +56,10 @@ class Solicitud:
  
     @staticmethod
     def cargar_solicitudes(path):
+        """
+        Lee un archivo CSV y crea una lista de objetos Solicitud a partir de sus filas.
+        Valida los datos y maneja errores de formato o archivo no encontrado.
+        """
         solicitudes = []
         try:
             with open(path, newline='', encoding='utf-8') as f:
@@ -68,6 +74,7 @@ class Solicitud:
                     except Exception as e:
                         raise ValueError(f"Error al procesar fila: {row} {e}")
         except FileNotFoundError:
-            raise FileNotFoundError(f"Archivo no encontrado: {path}")
+            print(f"Archivo no encontrado: {path}")
+            
         
         return solicitudes

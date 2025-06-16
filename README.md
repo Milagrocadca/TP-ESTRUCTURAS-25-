@@ -46,5 +46,8 @@ Miercoles 11 de junio:
 ACLARACIONES:
 - El programa detecta que no se pueden agregar mas de una vez el mismo vehiculo
 - Al imprimirse los vehiculos con su informacion Costo kg es cero en camion y Costo km es cero en tren de carga porque por default al principio vale eso. 
+- Si hay dos itinerarios que tienen el mismo valor minimo (ejemplo: si el tiempo minimo es igual en ambos), devuelve el primer itinerario que se crea
+- Toda solicitud debe tener un id_carga unico y no nulo
+
     
 

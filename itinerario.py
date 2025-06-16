@@ -10,7 +10,6 @@ class Itinerario:
         self.solicitud = solicitud
         self.vehiculo = vehiculo
         self.tramos = tramos  # lista de (origen, destino, conexion)
-        #self.kpi_total = kpi_total
         self.costo_total = costo_total
         self.tiempo_total = tiempo_total
         self.kpi_tipo = kpi_tipo
@@ -20,8 +19,6 @@ class Itinerario:
     def __str__(self):
         salida = f"Itinerario para solicitud {self.solicitud.get_id()} ({self.solicitud.get_origen()} → {self.solicitud.get_destino()})\n"
         salida += f"Vehículo: {self.vehiculo.get_tipo()}\n"
-        """salida += f"KPI utilizado: {self.kpi_tipo}\n"""
-        #salida += f"KPI utilizado: {self.kpi_tipo.upper()} (se optimizó el {'costo total' if self.kpi_tipo == 'costo' else 'tiempo total'})\n"
         salida += f"Costo total: {self.costo_total:.2f} pesos\n"
         salida += f"Tiempo total: {self.tiempo_total:.2f} minutos\n"
         salida += f"Cantidad máxima de vehículos necesarios en un tramo: {self.max_cant_vehiculos}\n"
@@ -39,9 +36,6 @@ class Itinerario:
 
     def get_tramos(self):
         return self.tramos
-
-    #def get_kpi_total(self):
-    #    return self.kpi_total
 
     def get_kpi_tipo(self):
         return self.kpi_tipo
