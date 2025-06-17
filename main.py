@@ -133,6 +133,13 @@ def main():
                                 print(f"\nMostrando los gráficos para la solicitud {solicitud.get_id()} (óptima en tiempo):")
                                 graficar_distancia_vs_tiempo(itinerario_tiempo, solicitud_id)
                                 graficar_costo_vs_distancia(itinerario_tiempo, solicitud_id)
+                            if (
+                                itinerario_costo
+                                and itinerario_tiempo
+                                and itinerario_costo.get_tramos() != itinerario_tiempo.get_tramos()
+                            ):
+                                print(f"\nMostrando gráfico comparativo para la solicitud {solicitud.get_id()}:")
+                                graficar_comparacion_itinerarios(itinerario_costo, itinerario_tiempo, solicitud_id)
             else:
                 print("Primero ejecuta la opción 4.")
 

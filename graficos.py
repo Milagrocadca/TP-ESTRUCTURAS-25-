@@ -151,18 +151,15 @@ def graficar_comparacion_itinerarios(itinerario_costo, itinerario_tiempo, solici
     Grafica un gráfico de barras agrupadas comparando costo total, tiempo total y cantidad de tramos
     entre dos itinerarios: el optimizado por costo y el optimizado por tiempo.
     """
-    etiquetas = ["Costo total", "Tiempo total (min)", "Cantidad de tramos"]
+    etiquetas = ["Costo total", "Tiempo total (min)"]
     valores_costo = [
         itinerario_costo.costo_total / 1000,
         itinerario_costo.tiempo_total,
-        len(itinerario_costo.get_tramos()),
     ]
 
-    #  PREGUNTAR SI SE QUEDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     valores_tiempo = [
         itinerario_tiempo.costo_total / 1000,
         itinerario_tiempo.tiempo_total,
-        len(itinerario_tiempo.get_tramos()),
     ]
 
     n = len(etiquetas)

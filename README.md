@@ -54,7 +54,7 @@ Dentro se utiliza random para simular de forma probabilística si hay mal clima 
 CLASE GRAFICOS: Para visualizar gráficamente distintos aspectos de los itinerarios de transporte. 
 ---  graficar_distancia_vs_tiempo() muestra cómo se acumula la distancia recorrida a medida que pasa el tiempo de cada itinerario creado. 
 ---  graficar_costo_vs_distancia() ilustra cómo se acumula el costo con la distancia total recorrida de cada itinerario creado. 
----  graficar_comparacion_itinerarios() compara dos itinerarios en términos de costo, tiempo total y cantidad de tramos. 
+---  graficar_comparacion_itinerarios() compara dos itinerarios en términos de costo y tiempo total solo si los itinerarios de kpi costo y tiempo son distintos. 
 --- Otras dos funciones comentadas permitirian ver los costos y timepos de cada modo de transporte.
 
 CLASE INPUTS: Ambas funciones aseguran que los datos ingresados por el usuario cumplan con restricciones básicas antes de ser utilizados en el programa. 
