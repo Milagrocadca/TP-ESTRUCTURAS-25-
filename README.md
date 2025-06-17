@@ -46,6 +46,61 @@ Lunes 16 de junio:
 
 
 
+RESUMEN:
+
+CLASE CONEXION: Se utiliza para encapsular la lógica y los atributos relacionados con una conexión (origen, destino, tipo, restricciones, etc.), permitiendo representar cada tramo como un objeto con comportamiento propio.
+Dentro se utiliza random para simular de forma probabilística si hay mal clima en vuelos.
+
+CLASE GRAFICOS: Para visualizar gráficamente distintos aspectos de los itinerarios de transporte. 
+---  graficar_distancia_vs_tiempo() muestra cómo se acumula la distancia recorrida a medida que pasa el tiempo de cada itinerario creado. 
+---  graficar_costo_vs_distancia() ilustra cómo se acumula el costo con la distancia total recorrida de cada itinerario creado. 
+---  graficar_comparacion_itinerarios() compara dos itinerarios en términos de costo, tiempo total y cantidad de tramos. 
+--- Otras dos funciones comentadas permitirian ver los costos y timepos de cada modo de transporte.
+
+CLASE INPUTS: Ambas funciones aseguran que los datos ingresados por el usuario cumplan con restricciones básicas antes de ser utilizados en el programa. 
+
+CLASE ITINERARIO: Almacena los datos de la solicitud, el vehículo asignado, los tramos que componen el recorrido, el costo total, el tiempo total y el tipo de KPI (criterio de optimización). También guarda la cantidad máxima de vehículos necesarios en cualquier tramo.
+Tuplas: self.tramos (origen, destino, conexion)
+Cada tramo es una tupla para iterar y descomponer fácilmente.
+Listas: tramos
+para almacenar todos los tramos en orden secuencial Y permite mantener la estructura de Una ruta desde origen hasta destino.
+
+CLASE MAIN: Permite gestionar vehículos, cargar solicitudes desde un archivo, planificar rutas optimizadas por costo y tiempo, y visualizar gráficos asociados. El flujo se asegura de ejecutar el planificador solo una vez para evitar duplicados.
+Diccionario: en red_nodos.get_red()
+Para representar la red de nodos y conexiones. 
+Lista: solicitudes
+Para almacenar todas las solicitudes cargadas desde archivo.
+
+CLASE NODO: Cada nodo almacena su nombre, los modos de transporte habilitados y las conexiones salientes hacia otros nodos. 
+Set: self.modos
+Se utiliza para almacenar los modos de transporte habilitados, permite buscarlos eficientemente y evita repeticiones.
+
+CLASE PLANIFICADOR: Encuentra rutas óptimas entre ciudades para solicitudes de transporte. Usa búsqueda en profundidad (_dfs) considerando restricciones del tipo de conexión, capacidad del vehículo y peso de la carga. Calcula itinerarios optimizados según un criterio e incluye una lógica especial para camiones por su restriccion personal. Y devuelve instancias de Itinerario como resultado final del plan.
+Diccionario: self.nodos, self.vehiculos
+Los nodos y vehículos se almacenan en diccionarios para permitir acceso rápido por nombre o tipo.
+Lista: ruta, rutas_validas, self.itinerarios_validos
+Set: visitados
+El conjunto evita ciclos en la duncion dfs, marcando los nodos ya recorridos.
+Tupla: cada tramo en la forma (origen, destino, vehiculo, conexion, cant_vehiculos)
+Para registrar cada paso de una ruta.
+Math.ceil: para calcular la cantidad necesaria de vehículos en función de la carga.
+
+CLASE RED: Carga nodos como instancias de Nodo desde nodos.csv y conexiones bidireccionales desde conexiones.csv como instancias de Conexion.
+Diccionario: self.red
+Set: nodo.modos
+Se usa para mantener los modos de transporte habilitados sin repeticiones.
+
+CLASE SOLICITUD: Permite cargar múltiples solicitudes desde un archivo CSV.
+Set:solicitud.ids_usados
+Para verificar que no se repita el ID de una carga.
+
+CLASE VALIDACIONES: Define funciones reutilizables de validación de datos para otras clases del sistema.
+
+CLASE VEHICULOS: Automotor, Tren, Aereo y Maritimo heredan de Vehiculo para definir vehículos específicos con valores predeterminados y comportamiento particular (costos especiales, cálculo de tiempo con clima).
+Diccionario para almacenar vehiculos.
+
+
+
 ACLARACIONES:
 - El programa detecta que no se pueden agregar mas de una vez el mismo vehiculo
 - Al imprimirse los vehiculos con su informacion Costo kg es cero en camion y Costo km es cero en tren de carga porque por default al principio vale eso. 
