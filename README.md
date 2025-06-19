@@ -63,7 +63,7 @@ CLASE ITINERARIO: Almacena los datos de la solicitud, el vehículo asignado, los
 Tuplas: self.tramos (origen, destino, conexion)
 Cada tramo es una tupla para iterar y descomponer fácilmente.
 Listas: tramos
-para almacenar todos los tramos en orden secuencial Y permite mantener la estructura de Una ruta desde origen hasta destino.
+para almacenar todos los tramos en orden secuencial y permite mantener la estructura de una ruta desde origen hasta destino.
 
 CLASE MAIN: Permite gestionar vehículos, cargar solicitudes desde un archivo, planificar rutas optimizadas por costo y tiempo, y visualizar gráficos asociados. El flujo se asegura de ejecutar el planificador solo una vez para evitar duplicados.
 Diccionario: en red_nodos.get_red()
@@ -89,8 +89,9 @@ CLASE RED: Carga nodos como instancias de Nodo desde nodos.csv y conexiones bidi
 Diccionario: self.red
 Set: nodo.modos
 Se usa para mantener los modos de transporte habilitados sin repeticiones.
+En caso de querer modificar los archivos de nodos y conexiones, debera modificar el path. 
 
-CLASE SOLICITUD: Permite cargar múltiples solicitudes desde un archivo CSV.
+CLASE SOLICITUD: Permite cargar múltiples solicitudes desde un archivo CSV que es solicitado al usuario cuando se ejecuta el codigo. 
 Set:solicitud.ids_usados
 Para verificar que no se repita el ID de una carga.
 
@@ -102,11 +103,18 @@ Diccionario para almacenar vehiculos.
 
 
 ACLARACIONES:
-- El programa detecta que no se pueden agregar mas de una vez el mismo vehiculo
+- El programa detecta que no se pueden agregar mas de una vez el mismo tipo de vehiculo
 - Al imprimirse los vehiculos con su informacion Costo kg es cero en camion y Costo km es cero en tren de carga porque por default al principio vale eso. 
-- Si hay dos itinerarios que tienen el mismo valor minimo (ejemplo: si el tiempo minimo es igual en ambos), devuelve el primer itinerario que se crea
+- Si hay dos itinerarios que tienen el mismo valor minimo (KPI) (ejemplo: si el tiempo minimo es igual en ambos), devuelve el primer itinerario que se crea
 - Toda solicitud debe tener un id_carga unico y no nulo
-- Los graficos imprimen por solicitud. Por lo tanto, una solicitud tiene los graficos de kpi costo y tiempo.
+- Los graficos imprimen por solicitud. Por lo tanto, una solicitud tiene los graficos de kpi costo y tiempo. Hay graficos comentados segun lo comentado con Federico.
+- Se puede cargar una vez el archivo de solicitudes. 
+
+COMO EJECUTAR EL PROGRAMA:
+1- Ejecutar desde main
+2- cargar los vehiculos a analizar
+3- cargar la solicitud (si se carga antes la solicitud que los vehiculos, no habra itinerarios disponibles)
+4- ver graficos
 
     
 
