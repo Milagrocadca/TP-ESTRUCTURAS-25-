@@ -1,5 +1,3 @@
-from inputs import *
-from conexion import Conexion
 import math
 
 class Vehiculo:
@@ -96,17 +94,7 @@ class Vehiculos:
     def __init__(self):
         self.vehiculos = dict()  # tipo de vehiculo es único
 
-    def addVehiculo(self):
-        print("\n===== AGREGAR VEHICULO =====")
-        print("Seleccione una opción:")
-        print("a) Camión")
-        print("b) Tren de Carga")
-        print("c) Avión")
-        print("d) Barco (fluvial)")
-        print("e) Barco (maritimo)")
-        opcion = input("Opción (a/b/c/d/e): ").strip().lower()
-
-    
+    def addVehiculo(self, opcion):
         if opcion == "a":
             self.vehiculos["Camión"] = Automotor()
         elif opcion == "b":
@@ -118,34 +106,22 @@ class Vehiculos:
         elif opcion == "e":
             self.vehiculos["Barco (maritimo)"] = Maritimo("maritimo")
         else:
-            print("Opción no reconocida.")
-        
-        
+            raise ValueError("Opción no reconocida.")
 
-    def removeVehiculo(self):
-        print("\n===== REMOVER VEHICULO =====")
-        print("Seleccione una opción para eliminar:")
-        print("a) Camión")
-        print("b) Tren de Carga")
-        print("c) Avión")
-        print("d) Barco (fluvial)")
-        print("e) Barco (maritimo)")
-        opcion = input("Opción (a/b/c/d/e): ").strip().lower()
-
+    def removeVehiculo(self, opcion):
         tipos = {
             "a": "Camión",
             "b": "Tren de Carga",
             "c": "Avión",
             "d": "Barco (fluvial)",
             "e": "Barco (maritimo)"
-            }
-
+        }
         tipo = tipos.get(opcion)
         if tipo and tipo in self.vehiculos:
             self.vehiculos.pop(tipo)
-            print(f"{tipo} eliminado correctamente.")
+            return True
         else:
-            print("El tipo de vehiculo a eliminar no existe o la opción no es válida.")
+            return False
 
     def getListVehiculos(self):
         return list(self.vehiculos.values())

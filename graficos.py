@@ -1,7 +1,5 @@
-from conexion import *
-from itinerario import *
-import matplotlib.pyplot as plt
-from collections import defaultdict
+from conexion import Conexion
+from itinerario import Itinerario
 import numpy as np
 
 
@@ -10,6 +8,11 @@ def graficar_distancia_vs_tiempo(itinerario, solicitud_id=None):
     Grafica la distancia acumulada recorrida en función del tiempo acumulado.
     Cada punto representa el avance tras cada tramo del itinerario.
     """
+    import matplotlib.pyplot as plt
+
+    plt.figure()
+
+    valor_por_defecto = 100000  # Valor por defecto para velocidad_max elegimos un numero imposible de llegar en caso de que no haya limite)
     # Obtener los tramos del itinerario
     tramos = itinerario.get_tramos()
     vehiculo = itinerario.get_vehiculo()
@@ -23,7 +26,8 @@ def graficar_distancia_vs_tiempo(itinerario, solicitud_id=None):
 
     for origen, destino, conexion in tramos:
         distancia = conexion.get_distancia()
-        tiempo = vehiculo.calcular_tiempo(distancia, conexion.get_vel_max())
+        vel_max = float(conexion.restricciones.get("velocidad_max", valor_por_defecto))
+        tiempo = vehiculo.calcular_tiempo(distancia, vel_max)
         distancia_acumulada += distancia
         tiempo_acumulado += tiempo
         distancias.append(distancia_acumulada)
@@ -43,7 +47,6 @@ def graficar_distancia_vs_tiempo(itinerario, solicitud_id=None):
         titulo += f" (Solicitud {solicitud_id})"
     plt.title(titulo)
     plt.grid(True)
-    plt.show()
 
 
 def graficar_costo_vs_distancia(itinerario, solicitud_id=None):
@@ -51,6 +54,10 @@ def graficar_costo_vs_distancia(itinerario, solicitud_id=None):
     Grafica el costo total acumulado por cada modo de transporte.
     Agrupa todos los itinerarios válidos por modo y suma sus costos.
     """
+    import matplotlib.pyplot as plt
+
+    plt.figure()
+
     tramos = itinerario.get_tramos()
     vehiculo = itinerario.get_vehiculo()
 
@@ -89,7 +96,6 @@ def graficar_costo_vs_distancia(itinerario, solicitud_id=None):
         titulo += f" (Solicitud {solicitud_id})"
     plt.title(titulo)
     plt.grid(True)
-    plt.show()
 
 
 # def graficar_costo_total_vs_modo(itinerarios_validos):
@@ -151,6 +157,10 @@ def graficar_comparacion_itinerarios(itinerario_costo, itinerario_tiempo, solici
     Grafica un gráfico de barras agrupadas comparando costo total, tiempo total y cantidad de tramos
     entre dos itinerarios: el optimizado por costo y el optimizado por tiempo.
     """
+    import matplotlib.pyplot as plt
+
+    plt.figure()  # <-- Ya está en tu código, bien!
+
     etiquetas = ["Costo total", "Tiempo total (min)"]
     valores_costo = [
         itinerario_costo.costo_total / 1000,
@@ -187,4 +197,3 @@ def graficar_comparacion_itinerarios(itinerario_costo, itinerario_tiempo, solici
     plt.legend()
     plt.tight_layout()
     plt.grid(axis="y", linestyle="--", alpha=0.7)
-    plt.show()

@@ -1,5 +1,3 @@
-from validaciones import *
-
 
 def inputNumPositivo(titulo):
     """
@@ -12,7 +10,7 @@ def inputNumPositivo(titulo):
     while seguir:
         try:
             valor = float(input(titulo))
-            if validarPositivo(valor):
+            if valor >= 0:
                 seguir = False
             else:
                 print("El valor ingresado debe ser un numero positivo. Intente nuevamente")
@@ -27,9 +25,9 @@ def inputModo():
     Repite la solicitud hasta que el usuario ingrese un modo aceptado por validarModo.
     Retorna el modo de transporte válido ingresado.
     """
-    modo = input("Modo transporte: ")  # Validar modo de transporte
-    while not validarModo(modo):
-        modo = input("Modo transporte: ")  # Validar modo de transporte
+    modo = input("Modo transporte: ")  
+    while not modo.lower() in ("automotor", "ferroviario", "aereo", "maritimo", "fluvial"):
+        modo = input("Modo transporte: ") 
 
     return modo
 

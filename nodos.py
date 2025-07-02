@@ -6,7 +6,6 @@ class Nodo:
     """
     
     def __init__(self, nombre, modos):
-
         #nombre= Nombre de la ciudad
         #modos= modos de transporte habilitados (list o set) 
         self.nombre = nombre
@@ -14,9 +13,12 @@ class Nodo:
         self.conexiones = [] 
 
     
-    def agregar_conexion(self, conexion): #agregar conexion:Conexion
+    def agregar_conexion(self, conexion):
+        if not isinstance(conexion, Conexion):
+            raise TypeError("El objeto agregado debe ser una instancia de Conexion")
         self.conexiones.append(conexion)
-
+    
+    
     def tiene_modo(self, modo):
         """
     Verifica si el nodo tiene habilitado el modo de transporte especificado.

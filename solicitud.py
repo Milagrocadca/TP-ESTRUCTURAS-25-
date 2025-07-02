@@ -1,6 +1,5 @@
 import csv
 
-from validaciones import *
 
 class Solicitud:
     ids_usados = set()
@@ -10,7 +9,7 @@ class Solicitud:
             raise ValueError("El ID de la solicitud no puede estar vacío")
         elif id_carga in Solicitud.ids_usados:
             raise ValueError('Ya existe una solicitud con ese ID')
-        elif not validarPositivo(peso):
+        elif not Solicitud.validarPositivo(peso):
             raise ValueError("El peso del vehículo ingresado no se encuentra dentro de las opciones disponibles")
 
         self.id_carga = str(id_carga)
@@ -19,6 +18,14 @@ class Solicitud:
         self.destino = destino
 
         Solicitud.ids_usados.add(id_carga)
+        
+    @staticmethod
+    def validarPositivo(num):
+        """
+        Verifica si un número es positivo (mayor o igual a cero).
+        Retorna True si es positivo, False en caso contrario.
+        """
+        return num >= 0
 
     #GETTER
     def get_id(self): 

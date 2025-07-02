@@ -1,4 +1,3 @@
-from validaciones import *
 
 from collections import deque
 

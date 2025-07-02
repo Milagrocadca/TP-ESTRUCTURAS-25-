@@ -8,9 +8,9 @@ class Red:
     Inicializa la red de nodos y conexiones a partir de archivos CSV.
     Carga los nodos y luego las conexiones entre ellos.
     """
-    def __init__(self):
-        self.path_nodos = 'nodos.csv'
-        self.path_conexiones =('conexiones.csv')
+    def __init__(self,archivo_nodos,archivo_conexiones):
+        self.path_nodos = archivo_nodos
+        self.path_conexiones = archivo_conexiones
         self.red = (
             self.cargar_nodos()
         )  # red = {'nodo1':{}, 'nodo2':{}, ..., 'nodon':{}}
