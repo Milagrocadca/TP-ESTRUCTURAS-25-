@@ -5,7 +5,7 @@ class Conexion:
     '''
 
     def __init__(self, origen, destino, tipo, distancia_km, restriccion=None, valor_restriccion=None):
-        self.restricciones = {}  # <-- Definir SIEMPRE primero
+        self.restricciones = {}  
 
         if not Conexion.validarTipo(tipo):
             raise ValueError("El tipo del tramo solo puede ser Ferroviaria, Automotor, Fluvial, Aerea")

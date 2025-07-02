@@ -1,6 +1,8 @@
 from conexion import Conexion
 from itinerario import Itinerario
 import numpy as np
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
 def graficar_distancia_vs_tiempo(itinerario, solicitud_id=None):
@@ -8,12 +10,9 @@ def graficar_distancia_vs_tiempo(itinerario, solicitud_id=None):
     Grafica la distancia acumulada recorrida en función del tiempo acumulado.
     Cada punto representa el avance tras cada tramo del itinerario.
     """
-    import matplotlib.pyplot as plt
-
     plt.figure()
 
     valor_por_defecto = 100000  # Valor por defecto para velocidad_max elegimos un numero imposible de llegar en caso de que no haya limite)
-    # Obtener los tramos del itinerario
     tramos = itinerario.get_tramos()
     vehiculo = itinerario.get_vehiculo()
 
@@ -54,8 +53,6 @@ def graficar_costo_vs_distancia(itinerario, solicitud_id=None):
     Grafica el costo total acumulado por cada modo de transporte.
     Agrupa todos los itinerarios válidos por modo y suma sus costos.
     """
-    import matplotlib.pyplot as plt
-
     plt.figure()
 
     tramos = itinerario.get_tramos()
@@ -98,68 +95,13 @@ def graficar_costo_vs_distancia(itinerario, solicitud_id=None):
     plt.grid(True)
 
 
-# def graficar_costo_total_vs_modo(itinerarios_validos):
-#     """
-#     Agrupa por modo y suma el costo total de todos los itinerarios de ese modo.
-#     """
-#     modo_costos = defaultdict(float)
-#     for itinerario in itinerarios_validos:
-#         vehiculo = itinerario.get_vehiculo()
-#         modo = (
-#             vehiculo.get_modo()
-#             if hasattr(vehiculo, "get_modo")
-#             else vehiculo.get_tipo()
-#         )
-#         modo_costos[modo] += itinerario.costo_total
-#
-#     modos = list(modo_costos.keys())
-#     costos = list(modo_costos.values())
-#
-#     plt.figure(figsize=(8, 5))
-#     plt.bar(modos, costos, color="skyblue")
-#     plt.xlabel("Modo de transporte")
-#     plt.ylabel("Costo total")
-#     plt.title("Costo total vs. Modo de transporte")
-#     plt.grid(axis="y")
-#     plt.show()
-
-# def graficar_tiempo_total_vs_modo(itinerarios_validos):
-    
-#     """
-#     Grafica una comparación entre dos itinerarios (uno optimizado por costo y otro por tiempo).
-#     Muestra barras agrupadas para costo total, tiempo total y cantidad de tramos de cada itinerario.
-#     """
-
-#     modo_tiempos = defaultdict(float)
-#     for itinerario in itinerarios_validos:
-#         vehiculo = itinerario.get_vehiculo()
-#         modo = (
-#             vehiculo.get_modo()
-#             if hasattr(vehiculo, "get_modo")
-#             else vehiculo.get_tipo()
-#         )
-#         modo_tiempos[modo] += itinerario.tiempo_total
-
-#     modos = list(modo_tiempos.keys())
-#     tiempos = list(modo_tiempos.values())
-
-#     plt.figure(figsize=(8, 5))
-#     plt.bar(modos, tiempos, color="orange")
-#     plt.xlabel("Modo de transporte")
-#     plt.ylabel("Tiempo total (minutos)")
-#     plt.title("Tiempo total vs. Modo de transporte")
-#     plt.grid(axis="y")
-#     plt.show()
-
 
 def graficar_comparacion_itinerarios(itinerario_costo, itinerario_tiempo, solicitud_id=None):
     """
     Grafica un gráfico de barras agrupadas comparando costo total, tiempo total y cantidad de tramos
     entre dos itinerarios: el optimizado por costo y el optimizado por tiempo.
     """
-    import matplotlib.pyplot as plt
-
-    plt.figure()  # <-- Ya está en tu código, bien!
+    plt.figure() 
 
     etiquetas = ["Costo total", "Tiempo total (min)"]
     valores_costo = [
@@ -179,14 +121,12 @@ def graficar_comparacion_itinerarios(itinerario_costo, itinerario_tiempo, solici
     print(valores_costo)
     print(valores_tiempo)
 
-    # Crear el gráfico
     plt.figure(figsize=(8, 6))
     plt.bar(
         x - ancho / 2, valores_costo, ancho, label="Optimizado por Costo en miles de $"
     )
     plt.bar(x + ancho / 2, valores_tiempo, ancho, label="Optimizado por Tiempo")
 
-    # Etiquetas y leyenda
     plt.xlabel("Categorías")
     plt.ylabel("Valor")
     titulo = "Comparación de Itinerarios: Costo vs Tiempo"
@@ -197,3 +137,47 @@ def graficar_comparacion_itinerarios(itinerario_costo, itinerario_tiempo, solici
     plt.legend()
     plt.tight_layout()
     plt.grid(axis="y", linestyle="--", alpha=0.7)
+
+
+def graficar_mapa_utilizacion(itinerarios, titulo="Mapa de utilización de la red"):
+    """
+    Dibuja un grafico de la red mostrando la utilización de cada conexión.
+    - Los nodos son las ciudades.
+    - Las aristas se dibujan más gruesas según cuántas veces se usaron en los itinerarios.
+    """
+    G = nx.DiGraph()
+    edge_usage = {}
+
+    # Contar cuántas veces se usa cada conexión
+    for itinerario in itinerarios:
+        for origen, destino, conexion in itinerario.get_tramos():
+            key = (origen, destino)
+            edge_usage[key] = edge_usage.get(key, 0) + 1
+            G.add_node(origen)
+            G.add_node(destino)
+            G.add_edge(origen, destino)
+
+    # Preparar pesos para las aristas
+    all_weights = [edge_usage[edge] for edge in G.edges()]
+    max_weight = max(all_weights) if all_weights else 1
+
+    # Dibujar el grafo
+    pos = nx.spring_layout(G, seed=42)  
+    plt.figure(figsize=(10, 7))
+    nx.draw_networkx_nodes(G, pos, node_size=700, node_color="lightblue")
+    nx.draw_networkx_labels(G, pos, font_size=10)
+
+    # Dibujar aristas con grosor proporcional al uso
+    for edge in G.edges():
+        nx.draw_networkx_edges(
+            G, pos,
+            edgelist=[edge],
+            width=1 + 4 * edge_usage[edge] / max_weight,
+            alpha=0.7,
+            edge_color="red"
+        )
+
+    plt.title(titulo)
+    plt.axis("off")
+    plt.tight_layout()
+    plt.show()

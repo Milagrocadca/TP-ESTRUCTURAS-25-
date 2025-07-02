@@ -102,9 +102,9 @@ class Vehiculos:
         elif opcion == "c":
             self.vehiculos["Avión"] = Aereo(None)
         elif opcion == "d":
-            self.vehiculos["Barco (fluvial)"] = Maritimo("fluvial")
+            self.vehiculos["Barco (fluvial)"] = Acuatico("fluvial")
         elif opcion == "e":
-            self.vehiculos["Barco (maritimo)"] = Maritimo("maritimo")
+            self.vehiculos["Barco (maritimo)"] = Acuatico("maritimo")
         else:
             raise ValueError("Opción no reconocida.")
 
@@ -232,7 +232,7 @@ class Aereo(Vehiculo):
             velocidad = self.velocidad
         return (distancia / velocidad) * 60
 
-class Maritimo(Vehiculo):
+class Acuatico(Vehiculo):
     def __init__(self, tipo_agua, calado_necesario=None):
         costo_fijo = 500 if tipo_agua == "fluvial" else 1500
         super().__init__(

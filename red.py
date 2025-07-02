@@ -1,5 +1,4 @@
 import csv
-import numpy as np
 from nodos import Nodo
 from conexion import Conexion
 

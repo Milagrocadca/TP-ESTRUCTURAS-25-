@@ -1,5 +1,57 @@
 # TP-ESTRUCTURAS-25-
 
+
+EXAMEN FINAL:
+
+
+ACLARACIONES:
+- El programa detecta que no se pueden agregar mas de una vez el mismo tipo de vehiculo
+- Al imprimirse los vehiculos con su informacion Costo kg es cero en camion y Costo km es cero en tren de carga porque por default al principio vale eso. 
+- Si hay dos itinerarios que tienen el mismo valor minimo (KPI) (ejemplo: si el tiempo minimo es igual en ambos), devuelve el primer itinerario que se crea
+- Toda solicitud debe tener un id_carga unico y no nulo
+- Los graficos imprimen por solicitud. Por lo tanto, una solicitud tiene los graficos de kpi costo y tiempo. Hay graficos comentados segun lo comentado con Federico.
+- Se puede cargar una vez el archivo de solicitudes. 
+
+
+COMO EJECUTAR EL PROGRAMA:
+1- Ejecutar desde main y seguir la guia del menu
+  
+
+COSAS QUE MODIFICAMOS:
+- No modificamos la funcion calcular costo en vehiculos porque ya cumplia con los requisitos de las correcciones
+- No modificamos la manera de calcular los graficos ya que no volvemos llamar a la funcion planificar, por ende, no volvemos a calcular el mejot itinerario. De modo que nuestro codigo ya cumplia con los requisitos de la correccion
+- Los comentarios docstring ya se encontraban en la entrega anterior. En nuestra clase red es necesario almacenar en ambos sentidos, debido a nuestro codigo, de esta forma, considerariamos la ida y vuelta de los posibles viajes
+- En nodos y conexiones cambiamos el path, ahora son un parametro de entrada que debe ingresar el usuario
+- En la clase Vehiculos, modificamos el nombre de la clase maritimo por acuatico, asi no es repetitivo
+- Sacamos los setters y getters no usados en el codigo (es decir, los que nunca fueron llamados ni utilizados)
+- Restructuramos el main, los mensajes que se imprimian sobre el main los colocamos dentro del mismo y no en otros archivos
+- Tambien modificamos el menu para que no haya posibilidad de que el usuario ingrese los datos de forma incorrecta
+- En vehiculos modificamos una esructura SET por un DICCIONARIO ya que era la mejor forma de optimizar el tiempo de busqueda
+- Eliminamos el archivo validaciones y sus funciones las agregamos en los archivos requeridos. Esto fue debido a que no eran utilizados en muchos archivos a la vez y, ademas, cada clase deberia encargarse de validar sus propios datos 
+- Realizamos un diccionario de restricciones con el fin de facilitar el mantenimiento del codigo y organizar las restricciones. Esto se debe a que son atributos que pueden modificarse y necesitan estar dentro de una estructura
+- Modificamos el archivo graficos con el fin de que todos los graficos se impriman a la vez y mejorar la visualizacion del programa
+- Restrucuramos la funcion planificar: ahora la funcion planificar calcula unicamente los posibles itinerarios y la funcion seleccionar_mejor_itinerario elige las mejores rutas que cumplan con cada kpi. De este modo, al crear un itinerario en el main, el programa te devuelve UN ITINERARIO POR KPI
+- Agregamos un tercer KPI que nos devuelva una ruta aleatoria con menos o igual a tres tramos
+- Creamos un grafico estadistico con el objetivo de dibujar una red mostrando la utilización de cada conexión.
+    - Los nodos son las ciudades.
+    - Las aristas se dibujan más gruesas según cuántas veces se usaron en los itinerarios.
+- Verificamos en el metodo agregar_conexion de la clase nodos que el parametro sea una instancia de conexion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Lunes 26 de mayo: planteamos todas las clases bases de nuestro TP junto a un archivo dedicado a las validaciones.
 
 
@@ -99,22 +151,4 @@ CLASE VALIDACIONES: Define funciones reutilizables de validación de datos para 
 
 CLASE VEHICULOS: Automotor, Tren, Aereo y Maritimo heredan de Vehiculo para definir vehículos específicos con valores predeterminados y comportamiento particular (costos especiales, cálculo de tiempo con clima).
 Diccionario para almacenar vehiculos.
-
-
-
-ACLARACIONES:
-- El programa detecta que no se pueden agregar mas de una vez el mismo tipo de vehiculo
-- Al imprimirse los vehiculos con su informacion Costo kg es cero en camion y Costo km es cero en tren de carga porque por default al principio vale eso. 
-- Si hay dos itinerarios que tienen el mismo valor minimo (KPI) (ejemplo: si el tiempo minimo es igual en ambos), devuelve el primer itinerario que se crea
-- Toda solicitud debe tener un id_carga unico y no nulo
-- Los graficos imprimen por solicitud. Por lo tanto, una solicitud tiene los graficos de kpi costo y tiempo. Hay graficos comentados segun lo comentado con Federico.
-- Se puede cargar una vez el archivo de solicitudes. 
-
-COMO EJECUTAR EL PROGRAMA:
-1- Ejecutar desde main
-2- cargar los vehiculos a analizar
-3- cargar la solicitud (si se carga antes la solicitud que los vehiculos, no habra itinerarios disponibles)
-4- ver graficos
-
-    
 

@@ -1,7 +1,7 @@
 from red import Red
 from vehiculos import Vehiculos
 from solicitud import Solicitud
-from graficos import graficar_distancia_vs_tiempo, graficar_costo_vs_distancia, graficar_comparacion_itinerarios
+from graficos import graficar_distancia_vs_tiempo, graficar_costo_vs_distancia, graficar_comparacion_itinerarios, graficar_mapa_utilizacion
 from planificador import Planificador
 import matplotlib.pyplot as plt
 
@@ -11,11 +11,19 @@ def pedir_archivos_red():
         archivo_conexiones = input("Ingrese el nombre del archivo de conexiones: ").strip()
         try:
             red_nodos = Red(archivo_nodos, archivo_conexiones)
-            return red_nodos  
+            tiene_conexiones = any(
+                len(nodo.conexiones) > 0 for nodo in red_nodos.get_red().values()
+            )
+            if not tiene_conexiones:
+                print("No se cargaron conexiones válidas. Verifique el archivo de conexiones.")
+            else:
+                return red_nodos
         except FileNotFoundError as e:
             print(f"Archivo no encontrado: {e}. Intente nuevamente.")
         except ValueError as e:
             print(f"Error en los datos del archivo: {e}. Intente nuevamente.")
+        except Exception as e:
+            print(f"Error al cargar la red: {e}. Intente nuevamente.")
 
 def menu_vehiculos(tipos_vehiculos):
     finalizado = False
@@ -86,9 +94,10 @@ def main():
     for solicitud in solicitudes:
         itinerario_costo = planificador.planificar(solicitud, kpi="costo")
         itinerario_tiempo = planificador.planificar(solicitud, kpi="tiempo")
-        itinerarios.append((solicitud, itinerario_costo, itinerario_tiempo))
+        itinerario_aleatorio = planificador.planificar(solicitud, kpi="aleatorio")
+        itinerarios.append((solicitud, itinerario_costo, itinerario_tiempo, itinerario_aleatorio))
 
-        if not itinerario_costo and not itinerario_tiempo:
+        if not itinerario_costo and not itinerario_tiempo and not itinerario_aleatorio:
             print(f"No se encontró itinerario para la solicitud {solicitud.get_id()}")
         else:
             if (
@@ -105,16 +114,19 @@ def main():
                 if itinerario_tiempo:
                     print(f"\nRuta más rápida para solicitud {solicitud.get_id()}:\n")
                     print(itinerario_tiempo)
+            if itinerario_aleatorio:
+                print(f"\nRuta aleatoria (máx 3 tramos) para solicitud {solicitud.get_id()}:\n")
+                print(itinerario_aleatorio)
 
     # Paso 4: Mostrar gráficos
     mostrar_graficos = False
     while not mostrar_graficos:
-        print("\n¿Desea mostrar los gráficos de los itinerarios creados?")
-        print("1. Sí")
-        print("2. No (salir)")
+        print("1. Mostrar los gráficos de los itinerarios creados")
+        print("2. Mostrar mapa de utilización de la red")
+        print("3. Salir")
         op = input("Seleccione una opción: ")
         if op == "1":
-            for solicitud, itinerario_costo, itinerario_tiempo in itinerarios:
+            for solicitud, itinerario_costo, itinerario_tiempo, itinerario_aleatorio in itinerarios:
                 solicitud_id = solicitud.get_id()
                 if not itinerario_costo and not itinerario_tiempo:
                     print(f"No se encontró itinerario para la solicitud {solicitud.get_id()}")
@@ -144,8 +156,18 @@ def main():
                             print(f"\nMostrando gráfico comparativo para la solicitud {solicitud.get_id()}:")
                             graficar_comparacion_itinerarios(itinerario_costo, itinerario_tiempo, solicitud_id)
             plt.show()
-            mostrar_graficos = True
         elif op == "2":
+            itinerarios_planos = []
+            for _, it_costo, it_tiempo, it_aleatorio in itinerarios:
+                for it in [it_costo, it_tiempo, it_aleatorio]:
+                    if it and it not in itinerarios_planos:
+                        itinerarios_planos.append(it)
+            if itinerarios_planos:
+                graficar_mapa_utilizacion(itinerarios_planos, titulo="Mapa de utilización de la red")
+                plt.show()
+            else:
+                print("No hay itinerarios para graficar el mapa de utilización.")
+        elif op == "3":
             print("Saliendo del programa.")
             mostrar_graficos = True
         else:
