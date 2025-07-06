@@ -14,7 +14,8 @@ ACLARACIONES:
 
 
 COMO EJECUTAR EL PROGRAMA:
-1- Ejecutar desde main y seguir la guia del menu
+1- Asegurarse de tener instalado networkx, numpy, matplotlib
+2- Ejecutar desde main y seguir la guia del menu
   
 
 COSAS QUE MODIFICAMOS:
